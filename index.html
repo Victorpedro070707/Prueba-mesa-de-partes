@@ -934,12 +934,45 @@ function validar(){
 
   let activo=false;
   let base='';
-  let finalText='';
+
+  // Une fragmentos sin repetir frases que Chrome Android devuelve de forma acumulativa.
+  function limpiarTexto(t){
+    return String(t || '').replace(/\s+/g,' ').trim();
+  }
+
+  function unirSinDuplicar(anterior, nuevo){
+    anterior=limpiarTexto(anterior);
+    nuevo=limpiarTexto(nuevo);
+    if(!anterior) return nuevo;
+    if(!nuevo) return anterior;
+
+    const a=anterior.toLocaleLowerCase('es-PE');
+    const b=nuevo.toLocaleLowerCase('es-PE');
+
+    // Chrome móvil suele devolver: "Solicito..." y después
+    // "Solicito... por motivo...". En ese caso conservamos solo la versión más completa.
+    if(b===a || b.startsWith(a+' ')) return nuevo;
+    if(a.startsWith(b+' ')) return anterior;
+
+    // Si el fragmento ya está contenido completo, no volver a añadirlo.
+    if(a.includes(b)) return anterior;
+
+    // Para dictado realmente segmentado, une por el mayor solapamiento de palabras.
+    const wa=anterior.split(' ');
+    const wb=nuevo.split(' ');
+    const max=Math.min(wa.length, wb.length);
+    let solape=0;
+    for(let n=max;n>=1;n--){
+      const cola=wa.slice(-n).join(' ').toLocaleLowerCase('es-PE');
+      const cabeza=wb.slice(0,n).join(' ').toLocaleLowerCase('es-PE');
+      if(cola===cabeza){ solape=n; break; }
+    }
+    return limpiarTexto(anterior+' '+wb.slice(solape).join(' '));
+  }
 
   btn.addEventListener('click',()=>{
     if(activo){ recognition.stop(); return; }
     base=campo.value.trim();
-    finalText='';
     try{ recognition.start(); }catch(e){}
   });
 
@@ -953,21 +986,23 @@ function validar(){
   };
 
   recognition.onresult=(event)=>{
-    let textoFinal='';
-    let textoInterino='';
+    let definitivo='';
+    let provisional='';
 
-    // Reconstruimos toda la sesión de reconocimiento en cada evento.
-    // Así evitamos duplicar frases cuando Chrome/Android vuelve a entregar
-    // resultados que ya había marcado como finales en eventos anteriores.
+    // Se reconstruye TODA la sesión en cada evento. No usamos +=.
+    // Así evitamos que Android vuelva a sumar resultados ya reconocidos.
     for(let i=0;i<event.results.length;i++){
-      const t=event.results[i][0].transcript;
-      if(event.results[i].isFinal) textoFinal += t+' ';
-      else textoInterino += t;
+      const texto=event.results[i][0].transcript;
+      if(event.results[i].isFinal){
+        definitivo=unirSinDuplicar(definitivo, texto);
+      }else{
+        provisional=unirSinDuplicar(provisional, texto);
+      }
     }
 
-    finalText = textoFinal;
+    const dictado=unirSinDuplicar(definitivo, provisional);
     const separador = base ? (/[.!?]$/.test(base) ? ' ' : '. ') : '';
-    campo.value=(base+separador+finalText+textoInterino).replace(/\s+/g,' ').trim();
+    campo.value=limpiarTexto(base+separador+dictado);
     campo.dispatchEvent(new Event('input',{bubbles:true}));
   };
 
@@ -996,6 +1031,7 @@ function validar(){
     }
   };
 })();
+
 
 $('#frm').addEventListener('submit', async e => {
   e.preventDefault();
