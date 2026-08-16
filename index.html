@@ -243,7 +243,7 @@
   .modal{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:1rem}
   .modal[hidden]{display:none}
   .modal-back{position:absolute;inset:0;background:rgba(15,34,51,.75)}
-  .ticket{position:relative;width:min(480px,100%);background:#FFFDF6;border:2.5px solid var(--ink);box-shadow:10px 10px 0 rgba(15,34,51,.4);
+  .ticket{position:relative;width:min(500px,100%);background:#FFFDF6;border:2.5px solid var(--ink);box-shadow:10px 10px 0 rgba(15,34,51,.4);
     max-height:92vh;overflow:auto;animation:fadeUp .35s ease}
   .ticket::before{content:"";display:block;height:14px;background:radial-gradient(circle at 8px -3px, transparent 7px, #FFFDF6 7px);background-size:16px 14px;margin-bottom:-1px}
   .ticket-inner{padding:1.4rem 1.6rem 1.6rem}
@@ -253,8 +253,8 @@
   .t-code{font-family:'Space Mono',monospace;font-size:1.7rem;font-weight:700;text-align:center;background:var(--gold-soft);border:2px dashed var(--ink);padding:.7rem;margin:1.1rem 0;letter-spacing:.04em}
   .t-rows{display:grid;gap:.5rem;font-size:.86rem}
   .t-rows div{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px dotted rgba(15,34,51,.3);padding-bottom:.35rem}
-  .t-rows span{color:var(--gris);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;padding-top:.15rem}
-  .t-rows b{text-align:right;font-weight:600}
+  .t-rows span{color:var(--gris);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;padding-top:.15rem;flex-shrink:0}
+  .t-rows b{text-align:right;font-weight:600;word-break:break-word}
   .t-stamp{position:absolute;right:1.4rem;top:5.4rem;transform:rotate(12deg);border:3px solid var(--green);color:var(--green);
     font-family:'Space Mono',monospace;font-weight:700;font-size:.95rem;padding:.35rem .8rem;letter-spacing:.15em;opacity:.9}
   .barcode{height:44px;margin:1.2rem 0 .3rem;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 5px,var(--ink) 5px 6px,transparent 6px 10px,var(--ink) 10px 13px,transparent 13px 16px)}
@@ -299,9 +299,10 @@
   .detalle-label{font-size:.8rem;font-weight:700;letter-spacing:.02em}
   .btn-voz{background:var(--card);color:var(--ink);border:2px solid var(--ink);padding:.38rem .7rem;cursor:pointer;font-family:'Space Mono',monospace;font-size:.66rem;font-weight:700;display:inline-flex;align-items:center;gap:.35rem}
   .btn-voz:hover{background:var(--gold-soft);box-shadow:3px 3px 0 var(--gold)}
-  .btn-voz.escuchando{background:#fff0ee;color:var(--red);border-color:var(--red)}
+  .btn-voz.escuchando{background:#fff0ee;color:var(--red);border-color:var(--red);animation:vozPulse 1.2s infinite}
   .voz-status{min-height:1rem;margin-top:.3rem;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gris)}
   .voz-status.activo{color:var(--red);font-weight:700}.voz-status.ok{color:var(--green);font-weight:700}.voz-status.error{color:var(--red);font-weight:700}
+  @keyframes vozPulse{50%{box-shadow:0 0 0 6px rgba(196,59,46,.12)}}
 </style>
 </head>
 <body>
@@ -494,17 +495,17 @@
       <div class="role-card"><b>✅ Resueltos</b><small>Aprobados y concluidos.</small><div class="num" id="dirResueltos">0</div></div>
       <div class="role-card"><b>📊 Total Bandeja</b><small>Expedientes en despacho.</small><div class="num" id="dirTotal">0</div></div>
     </div>
-    <div class="panel-subhead"><h3>📂 Expedientes para decisión</h3><button class="btn btn-light" style="font-size:.75rem;padding:.45rem .8rem" onclick="renderDireccionTable()">↻ Actualizar</button></div>
+    <div class="panel-subhead"><h3>📂 Expedientes para decisión directiva</h3><button class="btn btn-light" style="font-size:.75rem;padding:.45rem .8rem" onclick="renderDireccionTable()">↻ Actualizar</button></div>
     <div class="dir-table-wrap">
       <table class="admin-table">
         <thead>
           <tr>
-            <th>Expediente</th>
-            <th>Solicitante</th>
-            <th>Trámite / Asunto y Motivo</th>
+            <th>Expediente / Fecha</th>
+            <th>Solicitante y Estudiante</th>
+            <th>Trámite y Detalle de Solicitud</th>
             <th>Adjuntos</th>
             <th>Estado</th>
-            <th>Decisión Directiva</th>
+            <th>Decisión y Acciones</th>
           </tr>
         </thead>
         <tbody id="tblDireccion"><tr><td colspan="6">Cargando…</td></tr></tbody>
@@ -711,15 +712,15 @@
   </div>
 </footer>
 
-<!-- Modal comprobante -->
+<!-- Modal comprobante / Ficha técnica -->
 <div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="ticketTitle">
   <div class="modal-back" data-close></div>
   <div class="ticket" id="ticket">
     <div class="ticket-inner">
       <div class="ticket-head">
-        <div><h3 id="ticketTitle">Comprobante de recepción</h3><small>IEP CNI IMPERIAL · MESA DE PARTES VIRTUAL</small></div>
+        <div><h3 id="ticketTitle">Ficha del Expediente</h3><small>IEP CNI IMPERIAL · MESA DE PARTES VIRTUAL</small></div>
       </div>
-      <div class="t-stamp">RECIBIDO</div>
+      <div class="t-stamp" id="tBadgeEstado">RECIBIDO</div>
       <div class="t-code" id="tNumero">—</div>
       <div style="font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--gris);text-transform:uppercase;margin-top:.35rem">Número de expediente oficial</div>
       <div style="margin-top:1rem;border:2px dashed var(--gold);padding:.8rem;background:rgba(242,183,5,.08)">
@@ -728,14 +729,19 @@
       </div>
       <div class="t-rows">
         <div><span>Fecha</span><b id="tFecha">—</b></div>
+        <div><span>Condición</span><b id="tCond">—</b></div>
         <div><span>Solicitante</span><b id="tNombre">—</b></div>
         <div><span>DNI</span><b id="tDni">—</b></div>
+        <div><span>Correo</span><b id="tCorreo">—</b></div>
+        <div><span>Celular</span><b id="tCel">—</b></div>
+        <div><span>Estudiante</span><b id="tEstudiante">—</b></div>
         <div><span>Trámite</span><b id="tTramite">—</b></div>
         <div><span>Asunto</span><b id="tAsunto">—</b></div>
+        <div><span>Detalle</span><b id="tDetalle" style="font-weight:400;font-size:.8rem;text-align:right">—</b></div>
         <div><span>Adjuntos</span><b id="tAdj">—</b></div>
       </div>
       <div class="barcode" aria-hidden="true"></div>
-      <p class="t-note">CONSERVE SU CÓDIGO PERSONAL PARA CONSULTAR EL AVANCE EN LÍNEA</p>
+      <p class="t-note">DOCUMENTO OFICIAL DEL SISTEMA DE TRÁMITE DOCUMENTARIO</p>
       <div class="t-actions">
         <button class="btn" onclick="window.print()">🖨 Imprimir</button>
         <button class="btn btn-light" id="btnCopiar">⧉ Copiar códigos</button>
@@ -794,7 +800,7 @@ const TRAMITES = {
 const ESTADOS = {
   recepcionado:{ l:'Recepcionado', d:'El documento ingresó a ventanilla y tiene número asignado.' },
   revision:    { l:'En revisión',  d:'Secretaría verifica los datos y adjuntos del expediente.' },
-  derivado:    { l:'Derivado al área', d:'El expediente pasó a Dirección / Área académica.' },
+  derivado:    { l:'Derivado a Dirección', d:'El expediente pasó al despacho de Dirección.' },
   observado:   { l:'Observado',    d:'Falta información o documento. Revisa tu correo.' },
   resuelto:    { l:'Resuelto',     d:'El documento está listo para recojo o entrega digital.' }
 };
@@ -911,7 +917,7 @@ function validar(){
   return ok;
 }
 
-/* ══════════ Dictado por voz corregido para Android / Chrome ══════════ */
+/* ══════════ Dictado por voz (Android / Chrome) ══════════ */
 (function(){
   const btn = document.getElementById('btnVozDetalle');
   const campo = document.getElementById('fDetalle');
@@ -1063,18 +1069,29 @@ $('#frm').addEventListener('submit', async e => {
   }
 });
 
-/* ══════════ Modal / Ticket ══════════ */
+/* ══════════ Modal / Ficha Técnica Completa ══════════ */
 const modal = $('#modal');
 function abrirTicket(exp){
   $('#tNumero').textContent = exp.numero_expediente || exp.codigo || '—';
   $('#tCodigo').textContent = exp.codigo_seguimiento || '—';
   $('#tFecha').textContent = fmtFecha(exp.fecha) + ' · ' + fmtHora(exp.fecha);
-  $('#tNombre').textContent = exp.nombre;
-  $('#tDni').textContent = exp.dni;
-  $('#tTramite').textContent = TRAMITES[exp.tipo]?.n || exp.tipo;
-  $('#tAsunto').textContent = exp.asunto;
+  $('#tCond').textContent = exp.condicion || '—';
+  $('#tNombre').textContent = exp.nombre || '—';
+  $('#tDni').textContent = exp.dni || '—';
+  $('#tCorreo').textContent = exp.correo || '—';
+  $('#tCel').textContent = exp.celular || 'No registrado';
+  $('#tEstudiante').textContent = exp.estudiante || 'No aplica';
+  $('#tTramite').textContent = TRAMITES[exp.tipo]?.n || exp.tipo || '—';
+  $('#tAsunto').textContent = exp.asunto || '—';
+  $('#tDetalle').textContent = exp.detalle || 'Sin detalle adicional';
+
+  const badgeEst = $('#tBadgeEstado');
+  if(badgeEst){
+    badgeEst.textContent = (ESTADOS[exp.estado]?.l || exp.estado || 'RECIBIDO').toUpperCase();
+  }
+
   if(exp.archivos && exp.archivos.length){
-    $('#tAdj').innerHTML = exp.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:underline">${esc(a.nombre)}</a>`).join(', ');
+    $('#tAdj').innerHTML = exp.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" style="color:var(--navy);text-decoration:underline;display:block;margin-top:.2rem">📄 ${esc(a.nombre)}</a>`).join('');
   } else {
     $('#tAdj').textContent = 'Sin adjuntos';
   }
@@ -1266,7 +1283,7 @@ async function renderAdminTable(){
           ${e.estado === 'recepcionado' ? `<button class="btn-mini" title="Poner en revisión" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'revision')">🔍 Revisar</button>` : ''}
           ${e.estado !== 'observado' && e.estado !== 'resuelto' ? `<button class="btn-mini danger" title="Observar por requisitos" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'observado')">⚠ Observar</button>` : ''}
           ${['cert','const'].includes(e.tipo) && e.estado !== 'resuelto' ? `<button class="btn-mini success" title="Resolver trámite directo" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'resuelto')">✓ Resolver</button>` : ''}
-          <button class="btn-print-tbl" title="Imprimir Ticket" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>🖨</button>
+          <button class="btn-print-tbl" title="Ver ficha completa" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>👁 Ver</button>
           ${perfilActual?.rol === 'administrador' ? `<button class="btn-del" title="Eliminar" onclick="eliminarExpediente('${e.codigo_seguimiento}')">✕</button>` : ''}
         </div>
       </td>
@@ -1294,61 +1311,55 @@ window.eliminarExpediente = async (codSeg) => {
   else toast('Error al eliminar: ' + error.message, 'err');
 };
 
-/* Panel Dirección con Vista de Motivo y Archivos Adjuntos */
+/* ══════════ Panel Dirección (Vista Integral con Detalle y Adjuntos) ══════════ */
 async function renderDireccionTable(){
-  if(perfilActual?.rol !== 'direccion' && perfilActual?.rol !== 'administrador') return;
-  
   const lista = await loadExpAuth();
   const visibles = lista.filter(x => ['derivado','observado','resuelto'].includes(x.estado));
-  
   $('#dirDerivados').textContent = visibles.filter(x => x.estado==='derivado').length;
   $('#dirObservados').textContent = visibles.filter(x => x.estado==='observado').length;
   $('#dirResueltos').textContent = visibles.filter(x => x.estado==='resuelto').length;
   $('#dirTotal').textContent = visibles.length;
 
   const tbody = $('#tblDireccion');
-  if(!visibles.length){ 
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:1.2rem;color:var(--gris)">No hay expedientes en la bandeja de Dirección.</td></tr>'; 
-    return; 
-  }
+  if(!visibles.length){ tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:1.5rem;color:var(--gris)">No hay expedientes derivados a Dirección.</td></tr>'; return; }
   
-  tbody.innerHTML = visibles.map(e => `
-    <tr>
-      <td>
-        <b class="mono">${esc(e.numero_expediente || e.codigo)}</b><br>
-        <small style="color:var(--gris)">${fmtFecha(e.fecha)} · ${fmtHora(e.fecha)}</small>
-      </td>
-      <td>
-        <b>${esc(e.nombre)}</b><br>
-        <small style="color:var(--gris)">DNI: ${esc(e.dni || '—')}</small>
-        ${e.estudiante ? `<br><small style="color:var(--navy)">Est: ${esc(e.estudiante)}</small>` : ''}
-      </td>
-      <td>
-        <b style="color:var(--navy)">${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br>
-        <strong>Asunto:</strong> ${esc(e.asunto || '—')}<br>
-        <div style="margin-top:.35rem;padding:.4rem .6rem;background:#f5f8fa;border-left:3px solid var(--navy);font-size:.78rem;color:#333;max-width:320px;white-space:pre-wrap;">
-          <strong>Motivo:</strong> ${esc(e.detalle || 'Sin detalle')}
-        </div>
-      </td>
-      <td style="text-align:center">
-        ${
-          (e.archivos && e.archivos.length)
-            ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="display:inline-block;margin:2px;padding:.2rem .4rem;background:var(--card);border:1px solid var(--ink);border-radius:3px;text-decoration:none;color:var(--navy);font-size:.75rem;font-weight:700">📎 ${esc(a.nombre.length > 12 ? a.nombre.slice(0,10)+'…' : a.nombre)}</a>`).join('')
-            : '<span style="color:var(--gris);font-size:.75rem">Sin adjuntos</span>'
-        }
-      </td>
-      <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
-      <td>
-        <div class="admin-actions">
-          <button class="btn-mini success" title="Aprobar y Resolver trámite" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>
-          <button class="btn-mini danger" title="Observar por motivos legales/académicos" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>
-          <button class="btn-mini" title="Devolver expediente a Secretaría" onclick="decisionDireccion('${e.codigo_seguimiento}','revision')">↩ Devolver</button>
-          <button class="btn-print-tbl" title="Ver comprobante completo" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>👁 Ver</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = visibles.map(e => `<tr>
+    <td>
+      <b class="mono" style="font-size:.9rem">${esc(e.numero_expediente || e.codigo)}</b><br>
+      <small style="color:var(--gris)">${fmtFecha(e.fecha)} · ${fmtHora(e.fecha)}</small><br>
+      <small class="mono" style="color:var(--red)">${esc(e.codigo_seguimiento)}</small>
+    </td>
+    <td>
+      <b>${esc(e.nombre)}</b> <small style="color:var(--navy)">(${esc(e.condicion || 'Solicitante')})</small><br>
+      <small style="color:var(--gris)">DNI: ${esc(e.dni||'—')} · Cel: ${esc(e.celular||'—')}</small>
+      ${e.estudiante ? `<br><small style="color:var(--navy);font-weight:600">🎓 Estudiante: ${esc(e.estudiante)}</small>` : ''}
+    </td>
+    <td>
+      <b style="color:var(--navy)">${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br>
+      <strong>Asunto:</strong> ${esc(e.asunto||'—')}<br>
+      <div style="background:#FFFDF6;border:1px dashed rgba(15,34,51,.3);padding:.4rem .6rem;margin-top:.3rem;font-size:.78rem;max-height:85px;overflow-y:auto">
+        <strong>Detalle:</strong> ${esc(e.detalle || 'Sin detalle')}
+      </div>
+    </td>
+    <td style="text-align:center">
+      ${
+        (e.archivos && e.archivos.length)
+          ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="display:inline-block;padding:.2rem .4rem;margin:.1rem;background:var(--navy);color:var(--gold);text-decoration:none;border-radius:3px;font-size:.7rem">📎 ${esc(a.nombre.length > 15 ? a.nombre.substring(0,12)+'...' : a.nombre)}</a>`).join('')
+          : '<small style="color:var(--gris)">Sin adjuntos</small>'
+      }
+    </td>
+    <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
+    <td>
+      <div class="admin-actions">
+        <button class="btn-mini success" title="Resolver expediente" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>
+        <button class="btn-mini danger" title="Observar por motivos de fondo" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>
+        <button class="btn-mini" title="Devolver a Secretaría" onclick="decisionDireccion('${e.codigo_seguimiento}','revision')">↩ Devolver</button>
+        <button class="btn-mini" title="Ver ficha completa e imprimir" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>👁 Ficha</button>
+      </div>
+    </td>
+  </tr>`).join('');
 }
+
 window.decisionDireccion = async (codSeg, estado) => {
   const { error } = await _supabase.from(TABLA_EXPEDIENTES).update({estado}).eq('codigo_seguimiento', codSeg);
   if(!error){ toast(`Expediente actualizado a ${ESTADOS[estado]?.l || estado}.`,'ok'); renderDireccionTable(); }
@@ -1411,6 +1422,7 @@ async function exportarReporte(){
     'Celular': e.celular || '',
     'Estudiante': e.estudiante || '',
     'Asunto': e.asunto || '',
+    'Detalle': e.detalle || '',
     'Estado': ESTADOS[e.estado]?.l || e.estado,
     'N° Adjuntos': Array.isArray(e.archivos) ? e.archivos.length : 0
   }));
