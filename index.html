@@ -17,7 +17,7 @@
   :root{
     --ink:#0F2233; --navy:#16324F; --gold:#F2B705; --gold-soft:#FFE08A;
     --paper:#F5F1E6; --card:#FFFCF3; --red:#C43B2E; --green:#1D7A4F;
-    --muted:#51637500; --gris:#4A5B6B; --line:rgba(15,34,51,.9);
+    --gris:#4A5B6B; --line:rgba(15,34,51,.9);
     --shadow:6px 6px 0 rgba(15,34,51,.14);
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -60,7 +60,7 @@
 
   .stripes{height:10px;background:repeating-linear-gradient(-45deg,var(--navy) 0 16px,var(--gold) 16px 32px)}
 
-  /* ── Portada tipo carátula ── */
+  /* ── Portada ── */
   .masthead{display:flex;justify-content:space-between;align-items:flex-end;gap:2rem;flex-wrap:wrap;padding:3.4rem 0 2.6rem}
   .kicker{font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:.8rem}
   .masthead h2{font-size:clamp(2.5rem,6.5vw,4.8rem);font-weight:800;line-height:.98;text-transform:uppercase}
@@ -91,14 +91,6 @@
   .step h3{font-size:1rem;margin-bottom:.25rem}
   .step p{font-size:.83rem;color:var(--gris)}
 
-  /* ── Estadísticas ── */
-  .stats{background:var(--ink);color:#fff;margin-top:2.2rem;display:grid;grid-template-columns:repeat(4,1fr)}
-  .stat{padding:1.6rem 1.4rem;border-right:1px solid rgba(255,255,255,.15);text-align:left}
-  .stat:last-child{border-right:0}
-  .stat .num{font-family:'Space Mono',monospace;font-size:clamp(1.7rem,3.2vw,2.5rem);font-weight:700;color:var(--gold)}
-  .stat .num small{font-size:.9rem;color:#fff}
-  .stat p{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:#B9C6D2;margin-top:.2rem}
-
   /* ── Secciones ── */
   section.block{padding:3.2rem 0 0}
   .sec-head{display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;margin-bottom:1.6rem}
@@ -106,7 +98,7 @@
   .sec-head h2{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:800;text-transform:uppercase}
   .sec-head p{color:var(--gris);font-size:.9rem;flex-basis:100%;max-width:60ch}
 
-  /* ── Espacio de trabajo ── */
+  /* ── Formulario ── */
   .workspace{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:2rem;align-items:start}
   .card{background:var(--card);border:2.5px solid var(--ink);box-shadow:var(--shadow)}
   .card-h{background:var(--navy);color:#fff;padding:.85rem 1.3rem;display:flex;justify-content:space-between;align-items:center;gap:1rem}
@@ -188,13 +180,11 @@
   .timeline time{font-family:'Space Mono',monospace;font-size:.68rem;color:var(--navy);display:block}
   .timeline li.future{opacity:.45}
 
-  .recent-list{list-style:none}
-  .recent-list li{display:flex;justify-content:space-between;align-items:center;gap:.8rem;padding:.75rem 0;border-bottom:1px dashed rgba(15,34,51,.3);cursor:pointer;transition:background .15s,padding .15s}
-  .recent-list li:hover{background:var(--gold-soft);padding-left:.5rem;padding-right:.5rem}
-  .recent-list .code{font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700}
-  .recent-list .tipo{font-size:.8rem;color:var(--gris)}
+  .faq-box{display:flex;flex-direction:column;gap:.9rem}
+  .faq-box h4{font-size:.92rem;color:var(--navy);margin-bottom:.2rem}
+  .faq-box p{font-size:.82rem;color:var(--gris);line-height:1.5}
 
-  /* ── Panel de Administración ── */
+  /* ── Paneles Internos ── */
   .admin-panel{background:var(--card);border:3px solid var(--ink);margin-top:2.5rem;box-shadow:var(--shadow)}
   .admin-panel-head{background:var(--ink);color:#fff;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
   .admin-panel-head h2{font-size:1.2rem;display:flex;align-items:center;gap:.6rem;color:var(--gold)}
@@ -212,6 +202,25 @@
   .btn-del{background:var(--red);color:#fff;border:0;padding:.3rem .5rem;font-size:.75rem;cursor:pointer;font-weight:700}
   .btn-del:hover{opacity:.85}
 
+  .role-shell{display:none;margin-top:2.5rem}
+  .role-shell.active{display:block}
+  .role-userbar{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;font-size:.75rem}
+  .role-userbar .who{font-family:'Space Mono',monospace;background:rgba(255,255,255,.1);padding:.35rem .6rem;border:1px solid rgba(255,255,255,.25)}
+  .role-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;padding:1.25rem}
+  .role-card{border:2px solid var(--ink);background:#fff;padding:1rem;min-height:115px;box-shadow:3px 3px 0 rgba(15,34,51,.12)}
+  .role-card b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;margin-bottom:.3rem}
+  .role-card small{color:var(--gris);font-size:.75rem}
+  .role-card .num{font-family:'Space Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--navy);margin-top:.5rem}
+  .panel-subhead{padding:1rem 1.25rem;border-top:2px dashed rgba(15,34,51,.25);border-bottom:2px dashed rgba(15,34,51,.25);display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
+  .panel-subhead h3{font-size:1rem;text-transform:uppercase}
+  .user-table-wrap,.dir-table-wrap{overflow:auto;padding:0 1.25rem 1.25rem}
+  .user-table{width:100%;border-collapse:collapse;font-size:.8rem}
+  .user-table th{background:var(--navy);color:#fff;text-align:left;padding:.7rem;font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;white-space:nowrap}
+  .user-table td{padding:.7rem;border-bottom:1px solid rgba(15,34,51,.15);vertical-align:middle}
+  .btn-mini{border:1.5px solid var(--ink);background:var(--card);padding:.35rem .55rem;font-size:.72rem;font-weight:700;cursor:pointer}
+  .btn-mini:hover{background:var(--gold-soft)}
+  .btn-mini.danger{background:#fff0ee;color:var(--red);border-color:var(--red)}
+
   /* ── Comunicados ── */
   .com-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:2rem;align-items:start}
   .com-item{display:grid;grid-template-columns:86px 1fr auto;gap:1.2rem;padding:1.1rem 0;border-bottom:2px dashed rgba(15,34,51,.25);transition:background .15s}
@@ -220,7 +229,6 @@
   .com-item h3{font-size:1rem;margin-bottom:.2rem}
   .com-item p{font-size:.83rem;color:var(--gris)}
   .com-tag{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:.25rem .5rem;border:1.5px solid var(--ink);align-self:start;text-transform:uppercase}
-  .com-tag.urgente{background:var(--red);color:#fff;border-color:var(--red)}
   .com-tag.academico{background:var(--navy);color:#fff;border-color:var(--navy)}
 
   /* ── Pie ── */
@@ -228,9 +236,6 @@
   .foot-grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:2.5rem;padding:3rem 0}
   footer h4{font-family:'Bricolage Grotesque',sans-serif;color:#fff;font-size:1rem;text-transform:uppercase;margin-bottom:.9rem;letter-spacing:.05em}
   footer p,footer li{font-size:.84rem;line-height:1.7}
-  footer ul{list-style:none}
-  footer a{color:var(--gold);text-decoration:none}
-  footer a:hover{text-decoration:underline}
   .foot-bottom{border-top:1px solid rgba(255,255,255,.15);padding:1.1rem 0;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.08em}
 
   /* ── Modales ── */
@@ -244,7 +249,6 @@
   .ticket-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;border-bottom:2.5px solid var(--ink);padding-bottom:.9rem}
   .ticket-head h3{font-size:1.1rem;text-transform:uppercase}
   .ticket-head small{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gris);display:block;letter-spacing:.1em}
-  .ticket-head .brand-logo{width:50px;height:50px}
   .t-code{font-family:'Space Mono',monospace;font-size:1.7rem;font-weight:700;text-align:center;background:var(--gold-soft);border:2px dashed var(--ink);padding:.7rem;margin:1.1rem 0;letter-spacing:.04em}
   .t-rows{display:grid;gap:.5rem;font-size:.86rem}
   .t-rows div{display:flex;justify-content:space-between;gap:1rem;border-bottom:1px dotted rgba(15,34,51,.3);padding-bottom:.35rem}
@@ -257,12 +261,10 @@
   .t-actions{display:flex;gap:.7rem;margin-top:1.2rem;flex-wrap:wrap}
   .t-actions .btn{flex:1;justify-content:center;font-size:.85rem;padding:.75rem .5rem}
 
-  /* Modal Login Admin */
   .login-box{position:relative;width:min(360px,100%);background:var(--card);border:2.5px solid var(--ink);box-shadow:var(--shadow);padding:1.8rem;animation:fadeUp .35s ease}
   .login-box h3{font-size:1.2rem;margin-bottom:.4rem;text-transform:uppercase}
   .login-box p{font-size:.8rem;color:var(--gris);margin-bottom:1.2rem}
 
-  /* ── Toasts / reveals ── */
   .toasts{position:fixed;bottom:1.2rem;right:1.2rem;z-index:200;display:flex;flex-direction:column;gap:.6rem}
   .toast{background:var(--ink);color:#fff;padding:.85rem 1.2rem;border-left:6px solid var(--gold);font-size:.85rem;box-shadow:var(--shadow);animation:fadeUp .3s ease;max-width:320px}
   .toast.ok{border-left-color:#3DDC84}.toast.err{border-left-color:var(--red)}
@@ -279,59 +281,27 @@
     .workspace,.consulta-grid,.com-grid{grid-template-columns:1fr}
     .steps{grid-template-columns:1fr 1fr}
     .step{border-bottom:2px dashed rgba(15,34,51,.3)}
-    .stats{grid-template-columns:1fr 1fr}
-    .stat{border-bottom:1px solid rgba(255,255,255,.15)}
+    .role-grid{grid-template-columns:1fr 1fr}
     .aside-sticky{position:static}
     .foot-grid{grid-template-columns:1fr}
   }
   @media (max-width:560px){
     .steps{grid-template-columns:1fr}
     .form-grid{grid-template-columns:1fr}
+    .role-grid{grid-template-columns:1fr}
     .masthead{padding-top:2.2rem}
     .head-right{flex-direction:column;align-items:flex-end;gap:.5rem}
   }
-  @media (prefers-reduced-motion:reduce){
-    *,*::before,*::after{animation:none!important;transition:none!important}
-    .reveal{opacity:1;transform:none}
-  }
 
-/* Dictado por voz: añadido sin alterar la interfaz original */
-.detalle-voz-wrap{width:100%}
-.detalle-voz-head{display:flex;align-items:center;justify-content:space-between;gap:.7rem;margin-bottom:.35rem}
-.detalle-label{font-size:.8rem;font-weight:700;letter-spacing:.02em}
-.btn-voz{background:var(--card);color:var(--ink);border:2px solid var(--ink);padding:.38rem .7rem;cursor:pointer;font-family:'Space Mono',monospace;font-size:.66rem;font-weight:700;display:inline-flex;align-items:center;gap:.35rem}
-.btn-voz:hover{background:var(--gold-soft);box-shadow:3px 3px 0 var(--gold)}
-.btn-voz.escuchando{background:#fff0ee;color:var(--red);border-color:var(--red);animation:vozPulse 1.2s infinite}
-.voz-status{min-height:1rem;margin-top:.3rem;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gris)}
-.voz-status.activo{color:var(--red);font-weight:700}.voz-status.ok{color:var(--green);font-weight:700}.voz-status.error{color:var(--red);font-weight:700}
-@keyframes vozPulse{50%{box-shadow:0 0 0 6px rgba(196,59,46,.12)}}
-@media(max-width:560px){.detalle-voz-head{align-items:flex-start}.voz-label{display:none}.btn-voz{padding:.45rem .55rem}}
-
-
-/* ══════════ V2.0 — Acceso por roles y paneles internos ══════════ */
-.role-shell{display:none;margin-top:2.5rem}
-.role-shell.active{display:block}
-.role-userbar{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;font-size:.75rem}
-.role-userbar .who{font-family:'Space Mono',monospace;background:rgba(255,255,255,.1);padding:.35rem .6rem;border:1px solid rgba(255,255,255,.25)}
-.role-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1rem;padding:1.25rem}
-.role-card{border:2px solid var(--ink);background:#fff;padding:1rem;min-height:115px;box-shadow:3px 3px 0 rgba(15,34,51,.12)}
-.role-card b{display:block;font-family:'Bricolage Grotesque',sans-serif;font-size:1rem;margin-bottom:.3rem}
-.role-card small{color:var(--gris);font-size:.75rem}
-.role-card .num{font-family:'Space Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--navy);margin-top:.5rem}
-.panel-subhead{padding:1rem 1.25rem;border-top:2px dashed rgba(15,34,51,.25);border-bottom:2px dashed rgba(15,34,51,.25);display:flex;align-items:center;justify-content:space-between;gap:.8rem;flex-wrap:wrap}
-.panel-subhead h3{font-size:1rem;text-transform:uppercase}
-.user-table-wrap,.dir-table-wrap{overflow:auto;padding:0 1.25rem 1.25rem}
-.user-table{width:100%;border-collapse:collapse;font-size:.8rem}
-.user-table th{background:var(--navy);color:#fff;text-align:left;padding:.7rem;font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;white-space:nowrap}
-.user-table td{padding:.7rem;border-bottom:1px solid rgba(15,34,51,.15);vertical-align:middle}
-.user-table select{font-size:.75rem;padding:.35rem;min-width:125px}
-.btn-mini{border:1.5px solid var(--ink);background:var(--card);padding:.35rem .55rem;font-size:.72rem;font-weight:700;cursor:pointer}
-.btn-mini:hover{background:var(--gold-soft)}
-.btn-mini.danger{background:#fff0ee;color:var(--red);border-color:var(--red)}
-.role-note{font-size:.76rem;color:var(--gris);padding:0 1.25rem 1rem}
-@media(max-width:900px){.role-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:560px){.role-grid{grid-template-columns:1fr}.role-userbar{width:100%}.admin-panel-head{align-items:flex-start}}
-
+  .detalle-voz-wrap{width:100%}
+  .detalle-voz-head{display:flex;align-items:center;justify-content:space-between;gap:.7rem;margin-bottom:.35rem}
+  .detalle-label{font-size:.8rem;font-weight:700;letter-spacing:.02em}
+  .btn-voz{background:var(--card);color:var(--ink);border:2px solid var(--ink);padding:.38rem .7rem;cursor:pointer;font-family:'Space Mono',monospace;font-size:.66rem;font-weight:700;display:inline-flex;align-items:center;gap:.35rem}
+  .btn-voz:hover{background:var(--gold-soft);box-shadow:3px 3px 0 var(--gold)}
+  .btn-voz.escuchando{background:#fff0ee;color:var(--red);border-color:var(--red);animation:vozPulse 1.2s infinite}
+  .voz-status{min-height:1rem;margin-top:.3rem;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gris)}
+  .voz-status.activo{color:var(--red);font-weight:700}.voz-status.ok{color:var(--green);font-weight:700}.voz-status.error{color:var(--red);font-weight:700}
+  @keyframes vozPulse{50%{box-shadow:0 0 0 6px rgba(196,59,46,.12)}}
 </style>
 </head>
 <body>
@@ -341,9 +311,8 @@
   <div class="ticker-track" id="tickerTrack">
     <span>◆ <b>COMUNICADO:</b> Certificados de estudios ahora disponibles en versión digital firmada</span>
     <span>◆ <b>HORARIO:</b> Atención presencial de lunes a viernes, 7:30 a 15:30 h</span>
-    <span>◆ <b>NUEVO:</b> Canal de WhatsApp para seguimiento de expedientes</span>
-    <span>◆ <b>MATRÍCULA 2027:</b> Reserva tu vacante a través de esta mesa de partes</span>
-    <span>◆ <b>RECUERDA:</b> Guarda tu código de expediente para consultar el estado de tu trámite</span>
+    <span>◆ <b>SEGUIMIENTO:</b> Consulta tu trámite con tu código personal generado</span>
+    <span>◆ <b>RECUERDA:</b> Guarda tu código de seguimiento al finalizar el registro</span>
   </div>
 </div>
 
@@ -407,8 +376,8 @@
     <div>
       <p class="kicker">Recepción digital de documentos · Documento oficial</p>
       <h2>Mesa de Partes<br><span class="outline">Virtual</span></h2>
-      <p class="mast-intro">Presenta solicitudes, certificados, constancias y reclamos sin venir al colegio.
-      Tu documento ingresa a ventanilla, recibe un <strong>código de expediente</strong> y puedes seguir su estado en línea.</p>
+      <p class="mast-intro">Presenta solicitudes, certificados y constancias sin salir de casa.
+      Tu documento ingresa formalmente, recibe un <strong>número oficial</strong> y un <strong>código personal de seguimiento</strong>.</p>
       <div class="meta-chips">
         <span class="chip">FORM. MP-01</span>
         <span class="chip">LEY N.° 28044 · LEY GENERAL DE EDUCACIÓN</span>
@@ -428,26 +397,18 @@
   <!-- Pasos -->
   <section class="steps reveal" aria-label="Cómo funciona">
     <div class="step"><b>01</b><h3>Completa el formulario</h3><p>Indica tus datos, el tipo de trámite y adjunta los requisitos en PDF o imagen.</p></div>
-    <div class="step"><b>02</b><h3>Recibe tu código</h3><p>Al enviar, el sistema genera tu código de expediente, ej. <span class="mono">MP-CNI-2026-0001</span>.</p></div>
-    <div class="step"><b>03</b><h3>Sigue tu expediente</h3><p>Consulta el avance: recepcionado, en revisión, derivado y resuelto.</p></div>
-    <div class="step"><b>04</b><h3>Recibe tu documento</h3><p>Te avisamos por correo para el recojo presencial o envío digital firmado.</p></div>
+    <div class="step"><b>02</b><h3>Recibe tus códigos</h3><p>Obtienes tu número de expediente y tu código de seguimiento confidencial.</p></div>
+    <div class="step"><b>03</b><h3>Sigue tu expediente</h3><p>Consulta el avance en línea: recepcionado, en revisión, derivado y resuelto.</p></div>
+    <div class="step"><b>04</b><h3>Recibe tu documento</h3><p>Retiro presencial o envío digital firmado según corresponda al trámite.</p></div>
   </section>
 
-  <!-- Estadísticas -->
-  <section class="stats reveal" id="statsBand" aria-label="Indicadores">
-    <div class="stat"><div class="num"><span data-count id="statTotal">0</span></div><p>Expedientes recibidos</p></div>
-    <div class="stat"><div class="num"><span data-count id="statResueltos">0</span></div><p>Trámites resueltos</p></div>
-    <div class="stat"><div class="num"><span data-count id="statTipos">0</span></div><p>Tipos de trámite disponibles</p></div>
-    <div class="stat"><div class="num"><span data-count id="statTiempo">0</span><small> h</small></div><p>Tiempo promedio de respuesta</p></div>
-  </section>
-
-  <!-- Panel Secreto de la Secretaria -->
+  <!-- Panel Secretaría -->
   <section id="secAdmin" class="admin-panel" style="display:none">
     <div class="admin-panel-head">
-      <h2 id="tituloPanelExpedientes">🔐 Panel de Secretaría</h2>
+      <h2 id="tituloPanelExpedientes">📥 Panel de Secretaría</h2>
       <div class="admin-toolbar">
         <span class="who" id="usuarioSesionExp" style="font-family:'Space Mono',monospace;font-size:.65rem;color:#fff"></span>
-        <label for="fFiltroEstado" style="font-size:.8rem;color:var(--gold-soft)">Filtrar por estado:</label>
+        <label for="fFiltroEstado" style="font-size:.8rem;color:var(--gold-soft)">Filtrar:</label>
         <select id="fFiltroEstado">
           <option value="todos">Todos los expedientes</option>
           <option value="recepcionado">Recepcionados</option>
@@ -456,7 +417,7 @@
           <option value="observado">Observados</option>
           <option value="resuelto">Resueltos</option>
         </select>
-        <button class="btn btn-light" style="font-size:.75rem;padding:.4rem .8rem" onclick="exportarReporte()">📊 Exportar a Excel</button>
+        <button class="btn btn-light" style="font-size:.75rem;padding:.4rem .8rem" onclick="exportarReporte()">📊 Exportar Excel</button>
         <button class="btn btn-light" style="font-size:.75rem;padding:.4rem .8rem" onclick="cerrarAdminSession()">Cerrar sesión</button>
       </div>
     </div>
@@ -464,24 +425,24 @@
       <table class="admin-table">
         <thead>
           <tr>
-            <th>Código</th>
+            <th>Expediente / Seguimiento</th>
             <th>Fecha / Hora</th>
             <th>Solicitante</th>
             <th>Trámite / Asunto</th>
             <th>Contacto</th>
             <th>Adj.</th>
-            <th>Estado Actual</th>
-            <th>Acciones / Cambio de Estado</th>
+            <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody id="tblAdminExp">
-          <!-- Se completa mediante JS -->
+          <!-- Cargado por JS -->
         </tbody>
       </table>
     </div>
   </section>
 
-  <!-- V2.0: Panel Administrador General -->
+  <!-- Panel Administrador General -->
   <section id="panelAdministrador" class="admin-panel role-shell">
     <div class="admin-panel-head">
       <h2>👨‍💼 Administrador General</h2>
@@ -491,25 +452,24 @@
       </div>
     </div>
     <div class="role-grid">
-      <div class="role-card"><b>📂 Expedientes</b><small>Acceso total a expedientes y estados.</small><div class="num" id="admTotalExp">0</div></div>
-      <div class="role-card"><b>⏳ Pendientes</b><small>Recepcionados, revisión o derivados.</small><div class="num" id="admPendientes">0</div></div>
+      <div class="role-card"><b>📂 Total Expedientes</b><small>Registrados en el sistema.</small><div class="num" id="admTotalExp">0</div></div>
+      <div class="role-card"><b>⏳ Pendientes</b><small>En trámite activo.</small><div class="num" id="admPendientes">0</div></div>
       <div class="role-card"><b>✅ Resueltos</b><small>Expedientes finalizados.</small><div class="num" id="admResueltos">0</div></div>
-      <div class="role-card"><b>👥 Usuarios</b><small>Perfiles internos registrados.</small><div class="num" id="admUsuarios">0</div></div>
+      <div class="role-card"><b>👥 Personal</b><small>Usuarios con acceso interno.</small><div class="num" id="admUsuarios">0</div></div>
     </div>
     <div class="panel-subhead">
-      <div><h3>👥 Gestión de usuarios</h3><small>Roles permitidos: Administrador, Secretaría y Dirección.</small></div>
+      <div><h3>👥 Gestión de personal y accesos</h3><small>Roles: Administrador, Secretaría y Dirección.</small></div>
       <button class="btn" style="font-size:.78rem;padding:.55rem .8rem" onclick="mostrarAltaUsuario()">＋ Crear usuario</button>
     </div>
     <div id="altaUsuarioBox" style="display:none;padding:1rem 1.25rem;border-bottom:2px dashed rgba(15,34,51,.25)">
       <div class="form-grid">
         <div class="field"><label>Nombre completo</label><input id="uNombre" placeholder="Nombre y apellidos"></div>
-        <div class="field"><label>Correo</label><input id="uCorreo" type="email" placeholder="usuario@correo.com"></div>
-        <div class="field"><label>Cargo</label><input id="uCargo" placeholder="Ej.: Secretaria"></div>
+        <div class="field"><label>Correo institucional</label><input id="uCorreo" type="email" placeholder="usuario@iepcni.edu.pe"></div>
+        <div class="field"><label>Cargo</label><input id="uCargo" placeholder="Ej.: Mesa de partes"></div>
         <div class="field"><label>Rol</label><select id="uRol"><option value="secretaria">Secretaría</option><option value="direccion">Dirección</option><option value="administrador">Administrador</option></select></div>
         <div class="field"><label>Contraseña temporal</label><input id="uPassword" type="password" minlength="8" placeholder="Mínimo 8 caracteres"></div>
-        <div class="field" style="justify-content:flex-end"><button type="button" class="btn" onclick="crearUsuarioSistema()">Crear usuario</button></div>
+        <div class="field" style="justify-content:flex-end"><button type="button" class="btn" onclick="crearUsuarioSistema()">Guardar usuario</button></div>
       </div>
-      <p class="role-note" style="padding:.7rem 0 0">La creación segura de cuentas Auth se realiza mediante una Supabase Edge Function. Si aún no está instalada, el sistema te lo indicará sin modificar la base.</p>
     </div>
     <div class="user-table-wrap">
       <table class="user-table">
@@ -519,7 +479,7 @@
     </div>
   </section>
 
-  <!-- V2.0: Panel Dirección -->
+  <!-- Panel Dirección -->
   <section id="panelDireccion" class="admin-panel role-shell">
     <div class="admin-panel-head">
       <h2>🏛️ Panel de Dirección</h2>
@@ -529,25 +489,25 @@
       </div>
     </div>
     <div class="role-grid">
-      <div class="role-card"><b>📨 Derivados</b><small>Expedientes enviados a Dirección.</small><div class="num" id="dirDerivados">0</div></div>
-      <div class="role-card"><b>⚠ Observados</b><small>Expedientes que requieren subsanación.</small><div class="num" id="dirObservados">0</div></div>
-      <div class="role-card"><b>✅ Resueltos</b><small>Trámites concluidos.</small><div class="num" id="dirResueltos">0</div></div>
-      <div class="role-card"><b>📊 Total visible</b><small>Expedientes del flujo de Dirección.</small><div class="num" id="dirTotal">0</div></div>
+      <div class="role-card"><b>📨 Derivados</b><small>Para evaluación directiva.</small><div class="num" id="dirDerivados">0</div></div>
+      <div class="role-card"><b>⚠ Observados</b><small>En subsanación.</small><div class="num" id="dirObservados">0</div></div>
+      <div class="role-card"><b>✅ Resueltos</b><small>Aprobados y concluidos.</small><div class="num" id="dirResueltos">0</div></div>
+      <div class="role-card"><b>📊 Total Bandeja</b><small>Expedientes en despacho.</small><div class="num" id="dirTotal">0</div></div>
     </div>
     <div class="panel-subhead"><h3>📂 Expedientes para decisión</h3><button class="btn btn-light" style="font-size:.75rem;padding:.45rem .8rem" onclick="renderDireccionTable()">↻ Actualizar</button></div>
     <div class="dir-table-wrap">
       <table class="admin-table">
-        <thead><tr><th>Código</th><th>Solicitante</th><th>Trámite / Asunto</th><th>Estado</th><th>Decisión</th></tr></thead>
+        <thead><tr><th>Expediente</th><th>Solicitante</th><th>Trámite / Asunto</th><th>Estado</th><th>Decisión Directiva</th></tr></thead>
         <tbody id="tblDireccion"><tr><td colspan="5">Cargando…</td></tr></tbody>
       </table>
     </div>
   </section>
 
-  <!-- Formulario + panel lateral -->
+  <!-- Formulario -->
   <section class="block" id="solicitud">
     <div class="sec-head reveal">
       <span class="n">/01</span><h2>Presentar un documento</h2>
-      <p>Todos los campos marcados con <span style="color:var(--red)">*</span> son obligatorios. Los archivos adjuntos deben ser PDF, JPG o PNG (máx. 10 MB c/u).</p>
+      <p>Todos los campos con <span style="color:var(--red)">*</span> son obligatorios. Adjunta requisitos en PDF, JPG o PNG (máx. 10 MB c/u).</p>
     </div>
     <div class="workspace">
       <div class="card reveal">
@@ -606,11 +566,11 @@
                 <div class="detalle-voz-wrap">
                   <div class="detalle-voz-head">
                     <span class="detalle-label">Detalle de la solicitud <span class="req">*</span></span>
-                    <button type="button" class="btn-voz" id="btnVozDetalle" aria-label="Dictar detalle de la solicitud" title="Dictar por voz">
+                    <button type="button" class="btn-voz" id="btnVozDetalle" title="Dictar por voz">
                       <span class="mic-icon">🎙️</span><span class="voz-label">Dictar</span>
                     </button>
                   </div>
-                  <textarea id="fDetalle" placeholder="Describe tu pedido: período, año escolar, motivo, etc."></textarea>
+                  <textarea id="fDetalle" placeholder="Describe tu pedido: período escolar, motivo, etc."></textarea>
                   <div class="voz-status" id="vozStatus" aria-live="polite"></div>
                   <small class="err">Describe tu solicitud (mín. 30 caracteres).</small>
                 </div>
@@ -620,21 +580,21 @@
                 <div class="dropzone" id="drop">
                   <input type="file" id="fFiles" multiple accept=".pdf,.jpg,.jpeg,.png" aria-label="Adjuntar archivos">
                   <div class="dz-ico">📎</div>
-                  <p>Arrastra tus archivos aquí o haz clic para elegirlos</p>
-                  <small>DNI, voucher de pago, constancia de vacante… según el trámite (máx. 3 archivos)</small>
+                  <p>Arrastra tus archivos aquí o haz clic para seleccionarlos</p>
+                  <small>DNI, voucher, requisitos… (máx. 3 archivos de hasta 10 MB)</small>
                 </div>
                 <div class="file-chips" id="fileChips"></div>
-                <small class="err" id="fileErr" style="display:none;color:var(--red);font-weight:600">Revisa los archivos: máximo 3 y de hasta 10 MB.</small>
+                <small class="err" id="fileErr" style="display:none;color:var(--red);font-weight:600">Máximo 3 archivos y de hasta 10 MB cada uno.</small>
               </div>
               <div class="field full check">
                 <input type="checkbox" id="fDecl">
-                <label for="fDecl"><strong>Declaración jurada.</strong> Declaro que la información proporcionada es verdadera y autorizo el tratamiento de mis datos para la gestión del trámite, conforme a la Ley N.° 29733.</label>
+                <label for="fDecl"><strong>Declaración jurada.</strong> Declaro que la información proporcionada es verdadera y autorizo el tratamiento de mis datos personales para la gestión del trámite, conforme a la Ley N.° 29733.</label>
               </div>
               <small class="err" id="declErr" style="display:none;color:var(--red);font-weight:600">Debes aceptar la declaración jurada.</small>
             </div>
             <div class="form-foot">
               <button type="submit" class="btn btn-send">Enviar a Mesa de Partes ✉</button>
-              <small>Al enviar recibirás un código de expediente único e intransferible.</small>
+              <small>Recibirás tu número oficial y tu clave de seguimiento.</small>
             </div>
           </form>
         </div>
@@ -643,7 +603,7 @@
       <aside>
         <div class="aside-sticky">
           <div class="card reveal">
-            <div class="card-h"><h3>Requisitos del trámite</h3><span class="tag">DINÁMICO</span></div>
+            <div class="card-h"><h3>Requisitos del trámite</h3><span class="tag">INFORMACIÓN</span></div>
             <div class="card-b" id="reqPanel"></div>
           </div>
           <div class="card reveal">
@@ -673,11 +633,11 @@
   <section class="block" id="consulta">
     <div class="sec-head reveal">
       <span class="n">/02</span><h2>Consulta tu expediente</h2>
-      <p>Ingresa el código que recibiste al enviar tu documento para ver el estado y el avance del trámite.</p>
+      <p>Ingresa el código personal de seguimiento que recibiste para conocer el estado y avance de tu solicitud.</p>
     </div>
     <div class="consulta-grid">
       <div class="card reveal">
-        <div class="card-h"><h3>Seguimiento en línea</h3><span class="tag">ESTADO</span></div>
+        <div class="card-h"><h3>Seguimiento confidencial</h3><span class="tag">ESTADO</span></div>
         <div class="card-b">
           <form class="search-row" id="frmConsulta">
             <input id="qCode" placeholder="CNI-XXXX-XXXX" aria-label="Código de seguimiento" autocomplete="off">
@@ -687,9 +647,20 @@
         </div>
       </div>
       <div class="card reveal">
-        <div class="card-h"><h3>Últimos expedientes</h3><span class="tag" id="recentCount">0</span></div>
-        <div class="card-b">
-          <ul class="recent-list" id="recentList"></ul>
+        <div class="card-h"><h3>Preguntas frecuentes</h3><span class="tag">AYUDA</span></div>
+        <div class="card-b faq-box">
+          <div>
+            <h4>¿Dónde encuentro mi código?</h4>
+            <p>Aparece en el comprobante generado al registrar tu solicitud (ejemplo: <code>CNI-A8K2-9M4L</code>).</p>
+          </div>
+          <div>
+            <h4>¿Qué significa "Observado"?</h4>
+            <p>Falta un documento o dato. Secretaría o Dirección se contactará contigo por correo para subsanarlo.</p>
+          </div>
+          <div>
+            <h4>¿Cuándo puedo recoger mi documento?</h4>
+            <p>Cuando el estado cambie a <strong>Resuelto</strong>. Recibirás una notificación por correo.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -703,15 +674,15 @@
     <div class="com-grid">
       <div class="reveal">
         <article class="com-item">
-          <div class="fecha">03<br>AGO<br>2026</div>
-          <div><h3>Certificados digitales con firma electrónica</h3><p>Desde este mes, los certificados de estudios pueden emitirse en versión digital con código de verificación. El trámite se realiza por esta mesa de partes.</p></div>
-          <span class="com-tag academico">Académico</span>
+          <div class="fecha">AGO<br>2026</div>
+          <div><h3>Certificados digitales con firma electrónica</h3><p>Los certificados de estudios emitidos por la mesa de partes virtual cuentan con valor oficial y código de validación institucional.</p></div>
+          <span class="com-tag academico">Oficial</span>
         </article>
       </div>
       <div class="card reveal">
         <div class="card-h"><h3>¿Necesitas ayuda?</h3></div>
         <div class="card-b" style="font-size:.9rem">
-          <p>Si tu trámite fue <strong>observado</strong>, recibirás un correo indicando el documento faltante. Puedes subsanarlo respondiendo al mismo correo o acercándote a ventanilla.</p>
+          <p>Para consultas sobre expedientes de años anteriores, acércate a la Secretaría del colegio en horario de oficina.</p>
           <div class="form-foot"><a href="#solicitud" class="btn btn-light" style="font-size:.85rem">Nuevo trámite</a></div>
         </div>
       </div>
@@ -741,9 +712,9 @@
       </div>
       <div class="t-stamp">RECIBIDO</div>
       <div class="t-code" id="tNumero">—</div>
-      <div style="font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--gris);text-transform:uppercase;margin-top:.35rem">Número de expediente</div>
+      <div style="font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--gris);text-transform:uppercase;margin-top:.35rem">Número de expediente oficial</div>
       <div style="margin-top:1rem;border:2px dashed var(--gold);padding:.8rem;background:rgba(242,183,5,.08)">
-        <div style="font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--gris);text-transform:uppercase">Código de seguimiento</div>
+        <div style="font-family:'Space Mono',monospace;font-size:.62rem;letter-spacing:.12em;color:var(--gris);text-transform:uppercase">Código personal de seguimiento</div>
         <div class="t-code" id="tCodigo">—</div>
       </div>
       <div class="t-rows">
@@ -755,7 +726,7 @@
         <div><span>Adjuntos</span><b id="tAdj">—</b></div>
       </div>
       <div class="barcode" aria-hidden="true"></div>
-      <p class="t-note">CONSERVE EL CÓDIGO DE SEGUIMIENTO PARA CONSULTAR SU EXPEDIENTE</p>
+      <p class="t-note">CONSERVE SU CÓDIGO PERSONAL PARA CONSULTAR EL AVANCE EN LÍNEA</p>
       <div class="t-actions">
         <button class="btn" onclick="window.print()">🖨 Imprimir</button>
         <button class="btn btn-light" id="btnCopiar">⧉ Copiar códigos</button>
@@ -765,16 +736,16 @@
   </div>
 </div>
 
-<!-- Modal Login Admin -->
+<!-- Modal Login Personal -->
 <div class="modal" id="modalAdmin" hidden role="dialog" aria-modal="true">
   <div class="modal-back" id="closeAdminModal"></div>
   <div class="login-box">
     <h3>Acceso Institucional</h3>
-    <p>Ingresa con tu cuenta de Administrador, Secretaría o Dirección.</p>
+    <p>Ingresa con tus credenciales autorizadas.</p>
     <form id="frmLoginAdmin">
       <div class="field" style="margin-bottom:.8rem">
         <label for="fAdminEmail">Correo</label>
-        <input type="email" id="fAdminEmail" placeholder="secretaria@colegio.edu.pe" required>
+        <input type="email" id="fAdminEmail" placeholder="usuario@iepcni.edu.pe" required>
       </div>
       <div class="field" style="margin-bottom:1rem">
         <label for="fPass">Contraseña</label>
@@ -791,52 +762,40 @@
 <div class="toasts" id="toasts"></div>
 
 <script>
-/* ══════════ CONEXIÓN A LA BASE DE DATOS SUPABASE ══════════ */
-// 1) Ve a supabase.com -> tu proyecto -> Project Settings -> API
-// 2) Copia "Project URL" y pégalo en SUPABASE_URL
-// 3) Copia la llave "anon public" y pégala en SUPABASE_KEY
-// 4) Ejecuta el script SQL que te compartí (crea tabla + bucket) en el SQL Editor de Supabase
+/* ══════════ CONEXIÓN A SUPABASE ══════════ */
 const SUPABASE_URL = 'https://vfdohrgoizxqtytogtqr.supabase.co'; 
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZmZG9ocmdvaXp4cXR5dG9ndHFyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU4ODY3MzQsImV4cCI6MjEwMTQ2MjczNH0.lrJ80CQWKFiSSOMAxj_cxzR61kyXS1pEgIvVveD9I78'; 
 const TABLA_EXPEDIENTES = 'expediente_virtual';
-// Esta versión usa exclusivamente la tabla expediente_virtual.
-// Campos usados: codigo, numero_expediente, codigo_seguimiento, fecha,
-// condicion, tipo, nombre, dni, correo, celular, estudiante, asunto,
-// detalle, estado, observaciones y archivos.
-
-const BUCKET_ADJUNTOS = 'adjuntos'; // nombre del bucket de Storage para los archivos
+const BUCKET_ADJUNTOS = 'adjuntos';
 
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-// Nota: Supabase Auth ya guarda la sesión de login de forma segura por su cuenta
-// (usa su propio almacenamiento interno para mantenerte conectado); no necesitamos
-// manejar la sesión de administración manualmente como antes.
 
-/* ══════════ Datos de trámites ══════════ */
+/* ══════════ Catálogo de trámites y estados ══════════ */
 const TRAMITES = {
   cert:    { n:'Certificado de estudios', costo:'S/ 0.00', plazo:'5 días hábiles', req:['DNI del solicitante','Indicar años escolares a certificar'] },
   const:   { n:'Constancia de estudios', costo:'S/ 0.00', plazo:'3 días hábiles', req:['DNI del solicitante o apoderado','Grado y sección actual'] },
   cond:    { n:'Constancia de conducta y logros', costo:'S/ 10.00', plazo:'3 días hábiles', req:['DNI del apoderado','Voucher de pago escaneado'] },
-  dup:     { n:'Duplicado de libreta o certificado', costo:'S/ 35.00', plazo:'7 días hábiles', req:['Denuncia policial (robo o pérdida)','DNI del solicitante','Voucher de pago escaneado'] },
-  tras:    { n:'Traslado de documentos (libreta / ficha)', costo:'Gratuito', plazo:'5 días hábiles', req:['Constancia de vacante del colegio de destino','DNI del apoderado','Libreta de notas original'] },
-  matr:    { n:'Matrícula / Reserva de vacante 2027', costo:'Según tarifario', plazo:'2 días hábiles', req:['Ficha de matrícula llenada','Partida de nacimiento','Voucher de pago de cuota'] },
-  recl:    { n:'Reclamo o sugerencia', costo:'Gratuito', plazo:'Máx. 15 días hábiles', req:['Descripción detallada de los hechos','DNI del solicitante','Documentos de sustento (si aplica)'] },
+  dup:     { n:'Duplicado de libreta o certificado', costo:'S/ 35.00', plazo:'7 días hábiles', req:['Denuncia policial (robo o pérdida)','DNI del solicitante','Voucher de pago'] },
+  tras:    { n:'Traslado de matrícula', costo:'Gratuito', plazo:'5 días hábiles', req:['Constancia de vacante de destino','DNI del apoderado','Libreta de notas'] },
+  matr:    { n:'Matrícula / Reserva 2027', costo:'Según tarifario', plazo:'2 días hábiles', req:['Ficha de matrícula llenada','Partida de nacimiento','Voucher de pago'] },
+  recl:    { n:'Reclamo o sugerencia', costo:'Gratuito', plazo:'Máx. 15 días hábiles', req:['Descripción detallada de los hechos','DNI del solicitante'] },
   otro:    { n:'Otro trámite', costo:'Gratuito', plazo:'5 días hábiles', req:['Descripción clara del pedido','Documentos de sustento'] }
 };
 
 const ESTADOS = {
-  recepcionado:{ l:'Recepcionado', d:'El documento ingresó a ventanilla y tiene código asignado.' },
-  revision:    { l:'En revisión',  d:'Secretaría verifica los datos y los adjuntos del expediente.' },
-  derivado:    { l:'Derivado al área', d:'El expediente pasó al área responsable para su emisión.' },
-  observado:   { l:'Observado',    d:'Falta información o un documento. Revisa tu correo.' },
-  resuelto:    { l:'Resuelto',     d:'El documento está listo para recojo o envío digital.' }
+  recepcionado:{ l:'Recepcionado', d:'El documento ingresó a ventanilla y tiene número asignado.' },
+  revision:    { l:'En revisión',  d:'Secretaría verifica los datos y adjuntos del expediente.' },
+  derivado:    { l:'Derivado al área', d:'El expediente pasó a Dirección / Área académica.' },
+  observado:   { l:'Observado',    d:'Falta información o documento. Revisa tu correo.' },
+  resuelto:    { l:'Resuelto',     d:'El documento está listo para recojo o entrega digital.' }
 };
 const ORDEN = ['recepcionado','revision','derivado','resuelto'];
 
 /* ══════════ Utilidades ══════════ */
 const $ = s => document.querySelector(s);
-const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmtFecha = ts => new Date(ts).toLocaleDateString('es-PE',{day:'2-digit',month:'short',year:'numeric'});
-const fmtHora  = ts => new Date(ts).toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+const esc = s => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmtFecha = ts => ts ? new Date(ts).toLocaleDateString('es-PE',{day:'2-digit',month:'short',year:'numeric'}) : '—';
+const fmtHora  = ts => ts ? new Date(ts).toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'}) : '—';
 
 function toast(msg, tipo='ok'){
   const t = document.createElement('div');
@@ -846,78 +805,25 @@ function toast(msg, tipo='ok'){
   setTimeout(()=>{ t.style.opacity='0'; t.style.transition='opacity .4s'; setTimeout(()=>t.remove(),400); }, 3600);
 }
 
-/* ══════════ Reloj y estado ══════════ */
 function tick(){
   const ahora = new Date();
   $('#clockTime').textContent = ahora.toLocaleTimeString('es-PE');
   $('#clockDate').textContent = ahora.toLocaleDateString('es-PE',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
   const h = ahora.getHours() + ahora.getMinutes()/60, d = ahora.getDay();
-  let abierto = false;
-  if(d>=1 && d<=5) abierto = h>=7.5 && h<15.5;
-  if(d===6) abierto = h>=8 && h<12.5;
+  let abierto = (d>=1 && d<=5 && h>=7.5 && h<15.5) || (d===6 && h>=8 && h<12.5);
   $('#statusTxt').textContent = abierto ? 'Personal en ventanilla' : 'Ventanilla virtual 24/7';
 }
 tick(); setInterval(tick, 1000);
 
-/* ══════════ Persistencia mediante Supabase ══════════ */
-async function loadExp() {
-  const { data, error } = await _supabase.from(TABLA_EXPEDIENTES).select('*').order('fecha', { ascending: false });
-  if (error) {
-    console.error("Error al cargar datos:", error);
-    return [];
-  }
-  return data;
-}
-
-async function generarIdentificadores(){
-  const anio = new Date().getFullYear();
-
-  // El número de expediente es interno y secuencial.
-  const { data, error } = await _supabase
-    .from(TABLA_EXPEDIENTES)
-    .select('numero_expediente')
-    .like('numero_expediente', `EXP-${anio}-%`)
-    .order('numero_expediente', { ascending: false })
-    .limit(1);
-
-  if(error) throw error;
-
-  let secuencia = 1;
-  if(data && data.length && data[0].numero_expediente){
-    const partes = String(data[0].numero_expediente).split('-');
-    const ultimo = parseInt(partes[2], 10);
-    if(Number.isFinite(ultimo)) secuencia = ultimo + 1;
-  }
-
-  const numero_expediente = `EXP-${anio}-${String(secuencia).padStart(4,'0')}`;
-
-  // Código ciudadano: aleatorio/criptográfico.
-  // No se deriva del número de expediente y no se incrementa de uno en uno.
+/* Generador de código personal criptográfico */
+function generarCodigoSeguimiento(){
   const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-
-  function bloque(){
+  const bloque = () => {
     const bytes = new Uint32Array(4);
     crypto.getRandomValues(bytes);
     return [...bytes].map(n => caracteres[n % caracteres.length]).join('');
-  }
-
-  let codigo_seguimiento = `CNI-${bloque()}-${bloque()}`;
-
-  // Comprobación adicional contra la base.
-  for(let intento = 0; intento < 10; intento++){
-    const { data: existente, error: errorConsulta } = await _supabase
-      .from(TABLA_EXPEDIENTES)
-      .select('codigo_seguimiento')
-      .eq('codigo_seguimiento', codigo_seguimiento)
-      .limit(1);
-
-    if(errorConsulta) throw errorConsulta;
-    if(!existente || existente.length === 0) break;
-
-    codigo_seguimiento = `CNI-${bloque()}-${bloque()}`;
-  }
-
-  return { numero_expediente, codigo_seguimiento };
+  };
+  return `CNI-${bloque()}-${bloque()}`;
 }
 
 /* ══════════ Panel de requisitos ══════════ */
@@ -928,7 +834,7 @@ Object.entries(TRAMITES).forEach(([k,v])=>{
 function pintarReqs(){
   const k = selTramite.value, panel = $('#reqPanel');
   if(!k){
-    panel.innerHTML = '<p style="font-size:.88rem;color:var(--gris)">Selecciona un tipo de trámite para ver sus requisitos, costo y plazo de atención.</p>';
+    panel.innerHTML = '<p style="font-size:.88rem;color:var(--gris)">Selecciona un tipo de trámite para ver requisitos, costo y plazo.</p>';
     return;
   }
   const t = TRAMITES[k];
@@ -945,11 +851,12 @@ pintarReqs();
 
 /* ══════════ Zona de adjuntos ══════════ */
 const drop = $('#drop'), fileInput = $('#fFiles');
-let archivos = []; // guarda los objetos File reales (se suben a Supabase Storage al enviar)
+let archivos = [];
 ['dragover','dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
 ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
-drop.addEventListener('drop', e => { añadir(e.dataTransfer.files); });
+drop.addEventListener('drop', e => añadir(e.dataTransfer.files));
 fileInput.addEventListener('change', () => { añadir(fileInput.files); fileInput.value=''; });
+
 function añadir(lista){
   for(const f of lista){
     if(archivos.length >= 3){ $('#fileErr').style.display='block'; return; }
@@ -961,20 +868,19 @@ function añadir(lista){
 }
 function pintarChips(){
   $('#fileChips').innerHTML = archivos.map((f,i)=>
-    `<span class="file-chip">📄 ${esc(f.name)} <em style="opacity:.7">${(f.size/1024/1024).toFixed(1)} MB</em><button type="button" aria-label="Quitar" onclick="quitarArchivo(${i})">✕</button></span>`).join('');
+    `<span class="file-chip">📄 ${esc(f.name)} <em style="opacity:.7">${(f.size/1024/1024).toFixed(1)} MB</em><button type="button" onclick="quitarArchivo(${i})">✕</button></span>`).join('');
 }
 window.quitarArchivo = i => { archivos.splice(i,1); pintarChips(); };
 
-/* Sube un archivo real al bucket de Supabase Storage y devuelve su URL pública */
-async function subirArchivo(codigo, file){
-  const ruta = `${codigo}/${Date.now()}-${file.name}`;
+async function subirArchivo(codigoSeg, file){
+  const ruta = `${codigoSeg}/${Date.now()}-${file.name}`;
   const { error } = await _supabase.storage.from(BUCKET_ADJUNTOS).upload(ruta, file);
-  if(error){ throw error; }
+  if(error) throw error;
   const { data } = _supabase.storage.from(BUCKET_ADJUNTOS).getPublicUrl(ruta);
   return { nombre: file.name, url: data.publicUrl };
 }
 
-/* ══════════ Validación y envío a Supabase ══════════ */
+/* ══════════ Validación y Envío ══════════ */
 function validar(){
   let ok = true, primero = null;
   const marcar = (id, cond) => {
@@ -993,134 +899,45 @@ function validar(){
   const declOk = $('#fDecl').checked;
   $('#declErr').style.display = declOk ? 'none' : 'block';
   if(!declOk){ ok = false; primero = primero || $('#declErr'); }
-  if(!ok){ primero.scrollIntoView({behavior:'smooth', block:'center'}); toast('Revisa los campos marcados en rojo.','err'); }
+  if(!ok){ primero.scrollIntoView({behavior:'smooth', block:'center'}); toast('Revisa los campos en rojo.','err'); }
   return ok;
 }
 
-
-/* Dictado por voz — solo para #fDetalle */
+/* Dictado por voz */
 (function(){
-  const btn=document.getElementById('btnVozDetalle');
-  const campo=document.getElementById('fDetalle');
-  const status=document.getElementById('vozStatus');
+  const btn=document.getElementById('btnVozDetalle'), campo=document.getElementById('fDetalle'), status=document.getElementById('vozStatus');
   if(!btn || !campo || !status) return;
-
   const SR=window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
-    btn.addEventListener('click',()=>{
-      status.className='voz-status error';
-      status.textContent='El dictado por voz no está disponible en este navegador.';
-      toast('Prueba con Google Chrome.', 'err');
-    });
+    btn.addEventListener('click',()=>{ status.className='voz-status error'; status.textContent='Dictado no soportado en este navegador.'; toast('Prueba en Google Chrome.','err'); });
     return;
   }
-
   const recognition=new SR();
-  recognition.lang='es-PE';
-  recognition.continuous=true;
-  recognition.interimResults=true;
-
-  let activo=false;
-  let base='';
-
-  // Une fragmentos sin repetir frases que Chrome Android devuelve de forma acumulativa.
-  function limpiarTexto(t){
-    return String(t || '').replace(/\s+/g,' ').trim();
-  }
-
-  function unirSinDuplicar(anterior, nuevo){
-    anterior=limpiarTexto(anterior);
-    nuevo=limpiarTexto(nuevo);
-    if(!anterior) return nuevo;
-    if(!nuevo) return anterior;
-
-    const a=anterior.toLocaleLowerCase('es-PE');
-    const b=nuevo.toLocaleLowerCase('es-PE');
-
-    // Chrome móvil suele devolver: "Solicito..." y después
-    // "Solicito... por motivo...". En ese caso conservamos solo la versión más completa.
-    if(b===a || b.startsWith(a+' ')) return nuevo;
-    if(a.startsWith(b+' ')) return anterior;
-
-    // Si el fragmento ya está contenido completo, no volver a añadirlo.
-    if(a.includes(b)) return anterior;
-
-    // Para dictado realmente segmentado, une por el mayor solapamiento de palabras.
-    const wa=anterior.split(' ');
-    const wb=nuevo.split(' ');
-    const max=Math.min(wa.length, wb.length);
-    let solape=0;
-    for(let n=max;n>=1;n--){
-      const cola=wa.slice(-n).join(' ').toLocaleLowerCase('es-PE');
-      const cabeza=wb.slice(0,n).join(' ').toLocaleLowerCase('es-PE');
-      if(cola===cabeza){ solape=n; break; }
-    }
-    return limpiarTexto(anterior+' '+wb.slice(solape).join(' '));
-  }
-
+  recognition.lang='es-PE'; recognition.continuous=true; recognition.interimResults=true;
+  let activo=false, base='';
   btn.addEventListener('click',()=>{
     if(activo){ recognition.stop(); return; }
     base=campo.value.trim();
     try{ recognition.start(); }catch(e){}
   });
-
   recognition.onstart=()=>{
-    activo=true;
-    btn.classList.add('escuchando');
-    btn.querySelector('.mic-icon').textContent='🔴';
-    btn.querySelector('.voz-label').textContent='Escuchando';
-    status.className='voz-status activo';
-    status.textContent='● Escuchando… habla ahora';
+    activo=true; btn.classList.add('escuchando');
+    btn.querySelector('.mic-icon').textContent='🔴'; btn.querySelector('.voz-label').textContent='Escuchando';
+    status.className='voz-status activo'; status.textContent='● Escuchando… habla ahora';
   };
-
-  recognition.onresult=(event)=>{
-    let definitivo='';
-    let provisional='';
-
-    // Se reconstruye TODA la sesión en cada evento. No usamos +=.
-    // Así evitamos que Android vuelva a sumar resultados ya reconocidos.
-    for(let i=0;i<event.results.length;i++){
-      const texto=event.results[i][0].transcript;
-      if(event.results[i].isFinal){
-        definitivo=unirSinDuplicar(definitivo, texto);
-      }else{
-        provisional=unirSinDuplicar(provisional, texto);
-      }
-    }
-
-    const dictado=unirSinDuplicar(definitivo, provisional);
-    const separador = base ? (/[.!?]$/.test(base) ? ' ' : '. ') : '';
-    campo.value=limpiarTexto(base+separador+dictado);
-    campo.dispatchEvent(new Event('input',{bubbles:true}));
+  recognition.onresult=e=>{
+    let prov='';
+    for(let i=0;i<e.results.length;i++) prov += e.results[i][0].transcript;
+    campo.value = base ? base + ' ' + prov : prov;
   };
-
-  recognition.onerror=(event)=>{
-    const msg={
-      'not-allowed':'Permiso de micrófono denegado.',
-      'no-speech':'No detecté voz. Intenta nuevamente.',
-      'audio-capture':'No se encontró un micrófono disponible.',
-      'network':'Problema de conexión con el servicio de voz.'
-    }[event.error] || 'No fue posible iniciar el dictado.';
-    status.className='voz-status error';
-    status.textContent=msg;
-  };
-
   recognition.onend=()=>{
-    activo=false;
-    btn.classList.remove('escuchando');
-    btn.querySelector('.mic-icon').textContent='🎙️';
-    btn.querySelector('.voz-label').textContent='Dictar';
-    if(campo.value.trim()){
-      status.className='voz-status ok';
-      status.textContent='✓ Dictado incorporado al detalle.';
-    }else{
-      status.className='voz-status';
-      status.textContent='';
-    }
+    activo=false; btn.classList.remove('escuchando');
+    btn.querySelector('.mic-icon').textContent='🎙️'; btn.querySelector('.voz-label').textContent='Dictar';
+    status.className='voz-status ok'; status.textContent='✓ Dictado incorporado.';
   };
 })();
 
-
+/* Envío a Supabase (Trigger asigna el número de expediente en el servidor) */
 $('#frm').addEventListener('submit', async e => {
   e.preventDefault();
   if(!validar()) return;
@@ -1131,24 +948,18 @@ $('#frm').addEventListener('submit', async e => {
   btnEnviar.textContent = 'Enviando…';
 
   try{
-    const { numero_expediente, codigo_seguimiento } = await generarIdentificadores();
-
-    // El campo "codigo" ya existe en tu tabla y es obligatorio.
-    // Lo usamos como identificador interno y le asignamos el número de expediente.
-    const codigo = numero_expediente;
-
+    const codigo_seguimiento = generarCodigoSeguimiento();
     const archivosSubidos = [];
+
     for(const f of archivos){
       try{
         archivosSubidos.push(await subirArchivo(codigo_seguimiento, f));
-      }catch(errSubida){
-        toast('No se pudo subir "' + f.name + '": ' + errSubida.message, 'err');
+      }catch(errSub){
+        console.error('Error subiendo archivo:', errSub);
       }
     }
 
-    const exp = {
-      codigo,
-      numero_expediente,
+    const nuevoExp = {
       codigo_seguimiento,
       fecha: new Date().toISOString(),
       condicion: $('#fCond').value,
@@ -1167,38 +978,33 @@ $('#frm').addEventListener('submit', async e => {
 
     const { data: guardado, error } = await _supabase
       .from(TABLA_EXPEDIENTES)
-      .insert([exp])
+      .insert([nuevoExp])
       .select()
       .single();
 
-    if(error) {
-      toast('Error al registrar expediente en Supabase: ' + error.message, 'err');
-      console.error(error);
-      return;
-    }
+    if(error) throw error;
 
-    abrirTicket(guardado || exp);
+    abrirTicket(guardado);
     $('#frm').reset();
     archivos = [];
     pintarChips();
     pintarReqs();
-    refrescar();
-    toast('✓ Documento recibido. Expediente ' + numero_expediente + ' guardado en la nube.', 'ok');
-  } catch(error) {
-    console.error(error);
-    toast('No se pudo registrar el expediente: ' + (error.message || error), 'err');
+    toast('✓ Trámite recibido con éxito.', 'ok');
+  } catch(err) {
+    console.error(err);
+    toast('No se pudo registrar: ' + (err.message || err), 'err');
   } finally {
     btnEnviar.disabled = false;
     btnEnviar.textContent = txtOriginal;
   }
 });
 
-/* ══════════ Ticket / modal ══════════ */
+/* ══════════ Ticket / Comprobante ══════════ */
 const modal = $('#modal');
 function abrirTicket(exp){
   $('#tNumero').textContent = exp.numero_expediente || exp.codigo || '—';
   $('#tCodigo').textContent = exp.codigo_seguimiento || '—';
-  $('#tFecha').textContent = fmtFecha(exp.fecha || Date.now()) + ' · ' + fmtHora(exp.fecha || Date.now());
+  $('#tFecha').textContent = fmtFecha(exp.fecha) + ' · ' + fmtHora(exp.fecha);
   $('#tNombre').textContent = exp.nombre;
   $('#tDni').textContent = exp.dni;
   $('#tTramite').textContent = TRAMITES[exp.tipo]?.n || exp.tipo;
@@ -1215,412 +1021,22 @@ function cerrar(){ modal.hidden = true; document.body.style.overflow = ''; }
 modal.addEventListener('click', e => { if(e.target.hasAttribute('data-close')) cerrar(); });
 document.addEventListener('keydown', e => { if(e.key === 'Escape' && !modal.hidden) cerrar(); });
 $('#btnCopiar').addEventListener('click', async () => {
-  const numero = $('#tNumero').textContent;
-  const seguimiento = $('#tCodigo').textContent;
-  const texto = `Número de expediente: ${numero}\nCódigo de seguimiento: ${seguimiento}`;
-  try{ await navigator.clipboard.writeText(texto); }catch(e){}
-  toast('Datos de seguimiento copiados.', 'ok');
+  const texto = `Expediente: ${$('#tNumero').textContent}\nCódigo de seguimiento: ${$('#tCodigo').textContent}`;
+  try{ await navigator.clipboard.writeText(texto); toast('Códigos copiados.','ok'); }catch(e){}
 });
 
-/* ══════════ V2.0 — Acceso institucional y control de roles ══════════ */
-const modalAdmin = $('#modalAdmin');
-const secAdmin = $('#secAdmin');
-const panelAdministrador = $('#panelAdministrador');
-const panelDireccion = $('#panelDireccion');
-let perfilActual = null;
-
-function normalizarRol(rol, cargo=''){
-  const r=String(rol||'').trim().toLowerCase();
-  if(['administrador','secretaria','direccion'].includes(r)) return r;
-  const c=String(cargo||'').trim().toLowerCase();
-  if(c.includes('admin')) return 'administrador';
-  if(c.includes('secret')) return 'secretaria';
-  if(c.includes('direc')) return 'direccion';
-  return '';
-}
-
-async function obtenerPerfil(user){
-  if(!user) return null;
-
-  let { data, error } = await _supabase
-    .from('usuarios_sistema')
-    .select('*')
-    .eq('auth_user_id', user.id)
-    .maybeSingle();
-
-  if(error) throw error;
-
-  if(data) return data;
-
-  const respaldo = await _supabase
-    .from('usuarios_sistema')
-    .select('*')
-    .eq('correo', user.email)
-    .maybeSingle();
-
-  return respaldo.data || null;
-}
-
-function ocultarPanelesInternos(){
-  secAdmin.style.display='none';
-  panelAdministrador.classList.remove('active');
-  panelDireccion.classList.remove('active');
-}
-
-async function abrirPanelSegunRol(user, hacerScroll=true){
-  ocultarPanelesInternos();
-  const perfil=await obtenerPerfil(user);
-  if(!perfil){
-    await _supabase.auth.signOut({scope:'local'});
-    toast('Tu cuenta está autenticada, pero no tiene perfil en usuarios_sistema.', 'err');
-    return;
-  }
-  if(perfil.activo === false){
-    await _supabase.auth.signOut({scope:'local'});
-    toast('Tu usuario está desactivado. Contacta al Administrador.', 'err');
-    return;
-  }
-  perfilActual={...perfil, rolNormalizado:normalizarRol(perfil.rol, perfil.cargo)};
-  const rol=perfilActual.rolNormalizado;
-  if(!rol){
-    toast('El usuario no tiene un rol válido.', 'err');
-    return;
-  }
-
-  $('#btnToggleAdmin').textContent=`👤 ${perfil.nombre_completo || perfil.cargo || 'Sesión activa'}`;
-
-  if(rol==='administrador'){
-    panelAdministrador.classList.add('active');
-    secAdmin.style.display='block';
-    $('#tituloPanelExpedientes').textContent='📂 Expedientes — Administrador General';
-    $('#usuarioSesionExp').textContent=perfil.correo || '';
-    $('#adminWho').textContent=`${perfil.nombre_completo || ''} · ${perfil.cargo || 'Administrador'}`;
-    await Promise.all([renderAdminDashboard(), renderUsuariosSistema(), renderAdminTable()]);
-    if(hacerScroll) panelAdministrador.scrollIntoView({behavior:'smooth'});
-  } else if(rol==='secretaria'){
-    secAdmin.style.display='block';
-    $('#tituloPanelExpedientes').textContent='📥 Panel de Secretaría';
-    $('#usuarioSesionExp').textContent=`${perfil.nombre_completo || ''} · ${perfil.cargo || 'Secretaría'}`;
-    await renderAdminTable();
-    if(hacerScroll) secAdmin.scrollIntoView({behavior:'smooth'});
-  } else if(rol==='direccion'){
-    panelDireccion.classList.add('active');
-    $('#direccionWho').textContent=`${perfil.nombre_completo || ''} · ${perfil.cargo || 'Dirección'}`;
-    await renderDireccionTable();
-    if(hacerScroll) panelDireccion.scrollIntoView({behavior:'smooth'});
-  }
-}
-
-$('#btnToggleAdmin').addEventListener('click', async () => {
-  const { data: { session } } = await _supabase.auth.getSession();
-  if(session?.user){
-    try{ await abrirPanelSegunRol(session.user); }
-    catch(err){ console.error(err); toast('No se pudo cargar el perfil: '+err.message,'err'); }
-  } else {
-    modalAdmin.hidden=false;
-    $('#fAdminEmail').focus();
-  }
-});
-
-$('#closeAdminModal').addEventListener('click', () => modalAdmin.hidden = true);
-$('#btnCancelAdmin').addEventListener('click', () => modalAdmin.hidden = true);
-
-$('#frmLoginAdmin').addEventListener('submit', async e => {
-  e.preventDefault();
-  const email=$('#fAdminEmail').value.trim();
-  const pass=$('#fPass').value;
-  const { data, error }=await _supabase.auth.signInWithPassword({email,password:pass});
-  if(error){ toast('Correo o contraseña incorrectos','err'); return; }
-  try{
-    modalAdmin.hidden=true;
-    $('#fPass').value='';
-    await abrirPanelSegunRol(data.user);
-    toast('Acceso institucional correcto.','ok');
-  }catch(err){
-    console.error(err);
-    toast('No se pudo validar el rol: '+err.message,'err');
-  }
-});
-
-async function cerrarAdminSession(){
-  await _supabase.auth.signOut({scope:'local'});
-  perfilActual=null;
-  ocultarPanelesInternos();
-  $('#btnToggleAdmin').textContent='🔐 Acceso al Sistema';
-  toast('Sesión cerrada','ok');
-}
-window.cerrarAdminSession=cerrarAdminSession;
-
-/* Restauración de sesión al cargar */
-_supabase.auth.getSession().then(async ({data:{session}})=>{
-  if(session?.user){
-    try{ await abrirPanelSegunRol(session.user,false); }
-    catch(err){ console.error('No se pudo restaurar la sesión:',err); }
-  }
-});
-
-async function renderAdminTable(){
-  const lista = await loadExp();
-  const filtro = $('#fFiltroEstado').value;
-  const tbody = $('#tblAdminExp');
-  
-  const filtrados = lista.filter(e => filtro === 'todos' ? true : e.estado === filtro);
-
-  if(filtrados.length === 0){
-    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--gris)">No hay expedientes en este estado.</td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = filtrados.map(e => `
-    <tr>
-      <td><b class="mono">${esc(e.numero_expediente || e.codigo || '—')}</b><br><small class="mono" style="color:var(--red)">${esc(e.codigo_seguimiento || '—')}</small></td>
-      <td>${fmtFecha(e.fecha)}<br><small style="color:var(--gris)">${fmtHora(e.fecha)}</small></td>
-      <td><b>${esc(e.nombre)}</b><br><small style="color:var(--gris)">DNI: ${esc(e.dni || '—')}</small></td>
-      <td><b>${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br><small style="color:var(--gris)">${esc(e.asunto)}</small></td>
-      <td><small>${esc(e.correo)}</small></td>
-      <td style="text-align:center">${
-        (e.archivos && e.archivos.length)
-          ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="color:var(--navy)">📎</a>`).join(' ')
-          : ((e.archivos || []).length || 0)
-      }</td>
-      <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
-      <td>
-        <div class="admin-actions">
-          <select onchange="cambiarEstadoExpediente('${e.codigo}', this.value)">
-            ${Object.keys(ESTADOS).map(k => `<option value="${k}" ${e.estado === k ? 'selected' : ''}>${ESTADOS[k].l}</option>`).join('')}
-          </select>
-          <button class="btn-print-tbl" title="Imprimir Ticket" onclick='imprimirExpedienteSecretaria("${e.codigo}")'>🖨</button>
-          ${perfilActual?.rolNormalizado === 'administrador' ? `<button class="btn-del" title="Eliminar (solo Administrador)" onclick="eliminarExpediente('${e.codigo}')">✕</button>` : ''}
-        </div>
-      </td>
-    </tr>
-  `).join('');
-}
-
-$('#fFiltroEstado').addEventListener('change', renderAdminTable);
-
-/* ══════════ Exportar reporte a Excel ══════════ */
-async function exportarReporte(){
-  const lista = await loadExp();
-  const filtro = $('#fFiltroEstado').value;
-  const filtrados = lista.filter(e => filtro === 'todos' ? true : e.estado === filtro);
-
-  if(filtrados.length === 0){
-    toast('No hay expedientes para exportar con este filtro.', 'err');
-    return;
-  }
-
-  const filas = filtrados.map(e => ({
-    'N° Expediente': e.numero_expediente || e.codigo || '',
-    'Código de seguimiento': e.codigo_seguimiento || '',
-    'Fecha': fmtFecha(e.fecha),
-    'Hora': fmtHora(e.fecha),
-    'Condición': e.condicion || '',
-    'Trámite': TRAMITES[e.tipo]?.n || e.tipo,
-    'Solicitante': e.nombre,
-    'DNI': e.dni || '',
-    'Correo': e.correo || '',
-    'Celular': e.celular || '',
-    'Estudiante': e.estudiante || '',
-    'Asunto': e.asunto || '',
-    'Detalle': e.detalle || '',
-    'Estado': ESTADOS[e.estado]?.l || e.estado,
-    'N° Adjuntos': Array.isArray(e.archivos) ? e.archivos.length : 0
-  }));
-
-  const hoja = XLSX.utils.json_to_sheet(filas);
-  hoja['!cols'] = [
-    {wch:16},{wch:12},{wch:8},{wch:12},{wch:26},{wch:24},{wch:10},
-    {wch:26},{wch:12},{wch:22},{wch:24},{wch:40},{wch:14},{wch:10}
-  ];
-
-  const libro = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(libro, hoja, 'Expedientes');
-
-  const fechaArchivo = new Date().toISOString().slice(0,10);
-  const nombreFiltro = filtro === 'todos' ? 'todos' : filtro;
-  XLSX.writeFile(libro, `reporte-mesa-partes-${nombreFiltro}-${fechaArchivo}.xlsx`);
-  toast(`✓ Reporte exportado (${filtrados.length} expediente(s)).`, 'ok');
-}
-window.exportarReporte = exportarReporte;
-
-window.imprimirExpedienteSecretaria = async (codigo) => {
-  const lista = await loadExp();
-  const exp = lista.find(x => x.codigo === codigo);
-  if(exp){
-    abrirTicket(exp);
-  }
-};
-
-window.cambiarEstadoExpediente = async (codigo, nuevoEstado) => {
-  if(!perfilActual || !['administrador','secretaria'].includes(perfilActual.rolNormalizado)){ toast('No tienes permiso para cambiar estados.','err'); return; }
-  const { error } = await _supabase
-    .from(TABLA_EXPEDIENTES)
-    .update({ estado: nuevoEstado })
-    .eq('codigo', codigo);
-
-  if(!error) {
-    renderAdminTable();
-    refrescar();
-    toast(`Expediente ${codigo} actualizado a: ${ESTADOS[nuevoEstado].l}`, 'ok');
-  } else {
-    toast(`Error al cambiar estado: ${error.message}`, 'err');
-  }
-};
-
-window.eliminarExpediente = async (codigo) => {
-  if(perfilActual?.rolNormalizado !== 'administrador'){ toast('Solo el Administrador puede eliminar expedientes.','err'); return; }
-  if(!confirm(`¿Eliminar el expediente ${codigo}?`)) return;
-
-  const { error } = await _supabase
-    .from(TABLA_EXPEDIENTES)
-    .delete()
-    .eq('codigo', codigo);
-
-  if(!error) {
-    renderAdminTable();
-    refrescar();
-    toast(`Expediente ${codigo} eliminado`, 'ok');
-  } else {
-    toast(`Error al eliminar: ${error.message}`, 'err');
-  }
-};
-
-
-/* ══════════ V2.0 — Dashboard y gestión de usuarios ══════════ */
-async function renderAdminDashboard(){
-  if(perfilActual?.rolNormalizado!=='administrador') return;
-  const [expedientes, usuariosResp]=await Promise.all([
-    loadExp(),
-    _supabase.from('usuarios_sistema').select('id',{count:'exact'})
-  ]);
-  $('#admTotalExp').textContent=expedientes.length;
-  $('#admPendientes').textContent=expedientes.filter(x=>['recepcionado','revision','derivado','observado'].includes(x.estado)).length;
-  $('#admResueltos').textContent=expedientes.filter(x=>x.estado==='resuelto').length;
-  $('#admUsuarios').textContent=usuariosResp.count ?? (usuariosResp.data?.length || 0);
-}
-
-window.mostrarAltaUsuario=()=>{
-  if(perfilActual?.rolNormalizado!=='administrador') return;
-  const box=$('#altaUsuarioBox');
-  box.style.display=box.style.display==='none'?'block':'none';
-};
-
-async function renderUsuariosSistema(){
-  if(perfilActual?.rolNormalizado!=='administrador') return;
-  const tbody=$('#tblUsuariosSistema');
-  const {data,error}=await _supabase.from('usuarios_sistema').select('*').order('nombre_completo',{ascending:true});
-  if(error){ tbody.innerHTML=`<tr><td colspan="6">Error: ${esc(error.message)}</td></tr>`; return; }
-  if(!data?.length){ tbody.innerHTML='<tr><td colspan="6">No hay usuarios registrados.</td></tr>'; return; }
-  tbody.innerHTML=data.map(u=>`<tr>
-    <td><b>${esc(u.nombre_completo||'—')}</b></td>
-    <td class="mono">${esc(u.correo||'—')}</td>
-    <td><input value="${esc(u.cargo||'')}" onchange="actualizarCargoUsuario(${u.id},this.value)" style="min-width:130px;padding:.35rem"></td>
-    <td><select onchange="actualizarRolUsuario(${u.id},this.value)">
-      <option value="administrador" ${u.rol==='administrador'?'selected':''}>Administrador</option>
-      <option value="secretaria" ${u.rol==='secretaria'?'selected':''}>Secretaría</option>
-      <option value="direccion" ${u.rol==='direccion'?'selected':''}>Dirección</option>
-    </select></td>
-    <td><span class="badge ${u.activo===false?'observado':'resuelto'}">${u.activo===false?'Inactivo':'Activo'}</span></td>
-    <td><button class="btn-mini ${u.activo===false?'':'danger'}" onclick="cambiarActivoUsuario(${u.id},${u.activo===false?'true':'false'})">${u.activo===false?'Activar':'Desactivar'}</button></td>
-  </tr>`).join('');
-}
-window.renderUsuariosSistema=renderUsuariosSistema;
-
-async function actualizarRolUsuario(id,rol){
-  if(perfilActual?.rolNormalizado!=='administrador') return;
-  const {error}=await _supabase.from('usuarios_sistema').update({rol,updated_at:new Date().toISOString()}).eq('id',id);
-  if(error) toast('No se pudo cambiar el rol: '+error.message,'err'); else toast('Rol actualizado.','ok');
-}
-window.actualizarRolUsuario=actualizarRolUsuario;
-
-async function actualizarCargoUsuario(id,cargo){
-  if(perfilActual?.rolNormalizado!=='administrador') return;
-  const {error}=await _supabase.from('usuarios_sistema').update({cargo,updated_at:new Date().toISOString()}).eq('id',id);
-  if(error) toast('No se pudo actualizar el cargo: '+error.message,'err'); else toast('Cargo actualizado.','ok');
-}
-window.actualizarCargoUsuario=actualizarCargoUsuario;
-
-async function cambiarActivoUsuario(id,activo){
-  if(perfilActual?.rolNormalizado!=='administrador') return;
-  const {error}=await _supabase.from('usuarios_sistema').update({activo,updated_at:new Date().toISOString()}).eq('id',id);
-  if(error) toast('No se pudo cambiar el estado: '+error.message,'err');
-  else { toast(activo?'Usuario activado.':'Usuario desactivado.','ok'); await renderUsuariosSistema(); }
-}
-window.cambiarActivoUsuario=cambiarActivoUsuario;
-
-async function crearUsuarioSistema(){
-  if(perfilActual?.rolNormalizado!=='administrador') return;
-  const nombre=$('#uNombre').value.trim(), correo=$('#uCorreo').value.trim().toLowerCase(), cargo=$('#uCargo').value.trim(), rol=$('#uRol').value, password=$('#uPassword').value;
-  if(nombre.length<4 || !/^\S+@\S+\.\S+$/.test(correo) || cargo.length<2 || password.length<8){ toast('Completa nombre, correo, cargo y contraseña de al menos 8 caracteres.','err'); return; }
-  try{
-    const {data:{session}}=await _supabase.auth.getSession();
-    if(!session) throw new Error('Sesión no disponible');
-    const resp=await fetch(`${SUPABASE_URL}/functions/v1/admin-create-user`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},
-      body:JSON.stringify({nombre_completo:nombre,correo,cargo,rol,password})
-    });
-    let payload={}; try{ payload=await resp.json(); }catch(e){}
-    if(!resp.ok) throw new Error(payload.error || payload.message || 'La función admin-create-user aún no está desplegada');
-    toast('Usuario creado correctamente.','ok');
-    ['uNombre','uCorreo','uCargo','uPassword'].forEach(id=>$('#'+id).value='');
-    $('#altaUsuarioBox').style.display='none';
-    await renderUsuariosSistema();
-    await renderAdminDashboard();
-  }catch(err){
-    console.error(err);
-    toast('Alta segura pendiente: '+err.message,'err');
-  }
-}
-window.crearUsuarioSistema=crearUsuarioSistema;
-
-/* ══════════ V2.0 — Dirección ══════════ */
-async function renderDireccionTable(){
-  if(perfilActual?.rolNormalizado!=='direccion' && perfilActual?.rolNormalizado!=='administrador') return;
-  const lista=await loadExp();
-  const visibles=lista.filter(x=>['derivado','observado','resuelto'].includes(x.estado));
-  $('#dirDerivados').textContent=visibles.filter(x=>x.estado==='derivado').length;
-  $('#dirObservados').textContent=visibles.filter(x=>x.estado==='observado').length;
-  $('#dirResueltos').textContent=visibles.filter(x=>x.estado==='resuelto').length;
-  $('#dirTotal').textContent=visibles.length;
-  const tbody=$('#tblDireccion');
-  if(!visibles.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;padding:1.2rem">No hay expedientes derivados a Dirección.</td></tr>'; return; }
-  tbody.innerHTML=visibles.map(e=>`<tr>
-    <td><b class="mono">${esc(e.numero_expediente||e.codigo)}</b><br><small>${fmtFecha(e.fecha)}</small></td>
-    <td><b>${esc(e.nombre)}</b><br><small>DNI ${esc(e.dni||'—')}</small></td>
-    <td><b>${esc(TRAMITES[e.tipo]?.n||e.tipo)}</b><br><small>${esc(e.asunto||'')}</small></td>
-    <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l||e.estado}</span></td>
-    <td><div class="admin-actions">
-      <button class="btn-mini" onclick="decisionDireccion('${e.codigo}','resuelto')">✓ Resolver</button>
-      <button class="btn-mini" onclick="decisionDireccion('${e.codigo}','observado')">⚠ Observar</button>
-      <button class="btn-mini" onclick="decisionDireccion('${e.codigo}','revision')">↩ Devolver</button>
-      <button class="btn-print-tbl" onclick='imprimirExpedienteSecretaria("${e.codigo}")'>🖨</button>
-    </div></td>
-  </tr>`).join('');
-}
-window.renderDireccionTable=renderDireccionTable;
-
-async function decisionDireccion(codigo,estado){
-  if(perfilActual?.rolNormalizado!=='direccion' && perfilActual?.rolNormalizado!=='administrador'){ toast('No tienes permiso para esta decisión.','err'); return; }
-  const {error}=await _supabase.from(TABLA_EXPEDIENTES).update({estado}).eq('codigo',codigo);
-  if(error) toast('No se pudo actualizar: '+error.message,'err');
-  else { toast(`Expediente actualizado a ${ESTADOS[estado]?.l||estado}.`,'ok'); await renderDireccionTable(); refrescar(); }
-}
-window.decisionDireccion=decisionDireccion;
-
-/* ══════════ Consulta y línea de tiempo ══════════ */
+/* ══════════ Consulta Pública Segura (RPC) ══════════ */
 function timelineHTML(exp){
   if(exp.estado === 'observado'){
     return `
-      <li class="done"><span class="dot"></span><div><b>Recepcionado</b><small>${ESTADOS.recepcionado.d}</small><time>${fmtFecha(exp.fecha)} · ${fmtHora(exp.fecha)}</time></div></li>
+      <li class="done"><span class="dot"></span><div><b>Recepcionado</b><small>${ESTADOS.recepcionado.d}</small><time>${fmtFecha(exp.fecha)}</time></div></li>
       <li class="done"><span class="dot"></span><div><b>En revisión</b><small>${ESTADOS.revision.d}</small></div></li>
       <li class="current obs"><span class="dot"></span><div><b>⚠ Observado</b><small>${ESTADOS.observado.d}</small></div></li>`;
   }
   const idx = ORDEN.indexOf(exp.estado);
   return ORDEN.map((k,i)=>{
     const cls = i < idx ? 'done' : (i === idx ? 'current' : 'future');
-    const fecha = (i===0 ? fmtFecha(exp.fecha)+' · '+fmtHora(exp.fecha) : 'Pendiente');
+    const fecha = (i===0 ? fmtFecha(exp.fecha) : 'Pendiente');
     return `<li class="${cls}"><span class="dot"></span><div><b>${ESTADOS[k].l}</b><small>${ESTADOS[k].d}</small><time>${fecha}</time></div></li>`;
   }).join('');
 }
@@ -1628,19 +1044,18 @@ function timelineHTML(exp){
 async function buscar(code){
   const res = $('#resultado');
   const consulta = code.trim().toUpperCase();
-  const lista = await loadExp();
+  if(!consulta){ toast('Ingresa tu código de seguimiento.','err'); return; }
 
-  // La consulta ciudadana se hace únicamente por código de seguimiento.
-  // El número secuencial de expediente NO permite consultar públicamente.
-  const exp = lista.find(x => x.codigo_seguimiento === consulta);
+  // Llamada a la función segura RPC en Supabase
+  const { data: exp, error } = await _supabase.rpc('consultar_expediente_publico', { p_codigo: consulta });
 
   res.classList.add('show');
 
-  if(!exp){
+  if(error || !exp){
     res.classList.add('bad');
     res.innerHTML = `<div style="border:2px solid var(--red);padding:1.2rem">
-      <strong style="color:var(--red)">Código de seguimiento no encontrado.</strong>
-      <p style="font-size:.85rem;margin-top:.4rem">Verifica el código recibido. Tiene el formato <span class="mono">CNI-XXXX-XXXX</span>.</p>
+      <strong style="color:var(--red)">Código no encontrado.</strong>
+      <p style="font-size:.85rem;margin-top:.4rem">Verifica el código recibido en tu comprobante (ejemplo: <span class="mono">CNI-XXXX-XXXX</span>).</p>
     </div>`;
     setTimeout(()=>res.classList.remove('bad'), 400);
     return;
@@ -1655,71 +1070,275 @@ async function buscar(code){
         <span class="code">${esc(exp.codigo_seguimiento)}</span>
         <div style="font-size:.8rem;color:var(--gris);margin-top:.2rem">${esc(t)}</div>
       </div>
-      <span class="badge ${exp.estado}">${ESTADOS[exp.estado].l}</span>
+      <span class="badge ${exp.estado}">${ESTADOS[exp.estado]?.l || exp.estado}</span>
     </div>
     <div class="exp-datos">
-      <div><small>N.º expediente</small><strong>${esc(exp.numero_expediente || exp.codigo || '—')}</strong></div>
+      <div><small>N.º Expediente</small><strong>${esc(exp.numero_expediente)}</strong></div>
       <div><small>Solicitante</small><strong>${esc(exp.nombre)}</strong></div>
-      <div><small>Ingreso</small><strong>${fmtFecha(exp.fecha)}</strong></div>
-      <div><small>Adjuntos</small><strong>${Array.isArray(exp.archivos) ? exp.archivos.length : 0}</strong></div>
+      <div><small>Fecha de ingreso</small><strong>${fmtFecha(exp.fecha)}</strong></div>
+      <div><small>Adjuntos</small><strong>${exp.archivos_count || 0}</strong></div>
       ${exp.estudiante ? `<div><small>Estudiante</small><strong>${esc(exp.estudiante)}</strong></div>` : ''}
     </div>
     <ul class="timeline">${timelineHTML(exp)}</ul>`;
 }
 $('#frmConsulta').addEventListener('submit', e => { e.preventDefault(); buscar($('#qCode').value); });
 
-/* ══════════ Listas y contadores ══════════ */
-async function refrescar(){
-  const lista = await loadExp();
-  $('#recentCount').textContent = lista.length;
-  
-  if (lista.length === 0) {
-    $('#recentList').innerHTML = `<li style="justify-content:center;color:var(--gris);padding:1rem;">No hay expedientes registrados aún.</li>`;
-  } else {
-    $('#recentList').innerHTML = lista.slice(0,7).map(e => `
-      <li onclick="buscar('${e.codigo_seguimiento}');document.getElementById('consulta').scrollIntoView({behavior:'smooth'})">
-        <div><div class="code">${e.codigo}</div><div class="tipo">${esc(TRAMITES[e.tipo]?.n || e.tipo)} · ${fmtFecha(e.fecha)}</div></div>
-        <span class="badge ${e.estado}" style="font-size:.56rem">${ESTADOS[e.estado].l}</span>
-      </li>`).join('');
+/* ══════════ Paneles y Gestión Interna por Roles ══════════ */
+const modalAdmin = $('#modalAdmin'), secAdmin = $('#secAdmin'), panelAdministrador = $('#panelAdministrador'), panelDireccion = $('#panelDireccion');
+let perfilActual = null;
+
+async function loadExpAuth() {
+  const { data, error } = await _supabase.from(TABLA_EXPEDIENTES).select('*').order('fecha', { ascending: false });
+  if (error) { console.error("Error:", error); return []; }
+  return data;
+}
+
+async function obtenerPerfil(user){
+  if(!user) return null;
+  let { data } = await _supabase.from('usuarios_sistema').select('*').eq('auth_user_id', user.id).maybeSingle();
+  if(!data){
+    const resp = await _supabase.from('usuarios_sistema').select('*').eq('correo', user.email).maybeSingle();
+    data = resp.data;
+  }
+  return data || null;
+}
+
+function ocultarPanelesInternos(){
+  secAdmin.style.display='none';
+  panelAdministrador.classList.remove('active');
+  panelDireccion.classList.remove('active');
+}
+
+async function abrirPanelSegunRol(user){
+  ocultarPanelesInternos();
+  const perfil = await obtenerPerfil(user);
+  if(!perfil || perfil.activo === false){
+    await _supabase.auth.signOut({scope:'local'});
+    toast('Usuario sin permisos o desactivado.', 'err');
+    return;
+  }
+  perfilActual = perfil;
+  const rol = (perfil.rol || '').toLowerCase();
+  $('#btnToggleAdmin').textContent = `👤 ${perfil.nombre_completo || 'Sesión activa'}`;
+
+  if(rol === 'administrador'){
+    panelAdministrador.classList.add('active');
+    secAdmin.style.display = 'block';
+    $('#tituloPanelExpedientes').textContent = '📂 Expedientes — Administrador';
+    $('#usuarioSesionExp').textContent = perfil.correo;
+    $('#adminWho').textContent = `${perfil.nombre_completo} · Administrador`;
+    await Promise.all([renderAdminDashboard(), renderUsuariosSistema(), renderAdminTable()]);
+    panelAdministrador.scrollIntoView({behavior:'smooth'});
+  } else if(rol === 'secretaria'){
+    secAdmin.style.display = 'block';
+    $('#tituloPanelExpedientes').textContent = '📥 Panel de Secretaría';
+    $('#usuarioSesionExp').textContent = `${perfil.nombre_completo} · Secretaría`;
+    await renderAdminTable();
+    secAdmin.scrollIntoView({behavior:'smooth'});
+  } else if(rol === 'direccion'){
+    panelDireccion.classList.add('active');
+    $('#direccionWho').textContent = `${perfil.nombre_completo} · Dirección`;
+    await renderDireccionTable();
+    panelDireccion.scrollIntoView({behavior:'smooth'});
+  }
+}
+
+$('#btnToggleAdmin').addEventListener('click', async () => {
+  const { data: { session } } = await _supabase.auth.getSession();
+  if(session?.user) await abrirPanelSegunRol(session.user);
+  else { modalAdmin.hidden = false; $('#fAdminEmail').focus(); }
+});
+
+$('#closeAdminModal').addEventListener('click', () => modalAdmin.hidden = true);
+$('#btnCancelAdmin').addEventListener('click', () => modalAdmin.hidden = true);
+
+$('#frmLoginAdmin').addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = $('#fAdminEmail').value.trim(), pass = $('#fPass').value;
+  const { data, error } = await _supabase.auth.signInWithPassword({email, password:pass});
+  if(error){ toast('Credenciales incorrectas.', 'err'); return; }
+  modalAdmin.hidden = true;
+  $('#fPass').value = '';
+  await abrirPanelSegunRol(data.user);
+  toast('Sesión iniciada.', 'ok');
+});
+
+async function cerrarAdminSession(){
+  await _supabase.auth.signOut({scope:'local'});
+  perfilActual = null;
+  ocultarPanelesInternos();
+  $('#btnToggleAdmin').textContent = '🔐 Acceso al Sistema';
+  toast('Sesión cerrada.', 'ok');
+}
+window.cerrarAdminSession = cerrarAdminSession;
+
+/* Render de Tablas Internas */
+async function renderAdminTable(){
+  const lista = await loadExpAuth();
+  const filtro = $('#fFiltroEstado').value;
+  const filtrados = lista.filter(e => filtro === 'todos' ? true : e.estado === filtro);
+  const tbody = $('#tblAdminExp');
+
+  if(!filtrados.length){
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:1.5rem;color:var(--gris)">No hay expedientes en este estado.</td></tr>`;
+    return;
   }
 
-  const resueltos = lista.filter(e=>e.estado==='resuelto').length;
+  tbody.innerHTML = filtrados.map(e => `
+    <tr>
+      <td><b class="mono">${esc(e.numero_expediente || e.codigo)}</b><br><small class="mono" style="color:var(--red)">${esc(e.codigo_seguimiento)}</small></td>
+      <td>${fmtFecha(e.fecha)}<br><small style="color:var(--gris)">${fmtHora(e.fecha)}</small></td>
+      <td><b>${esc(e.nombre)}</b><br><small style="color:var(--gris)">DNI: ${esc(e.dni || '—')}</small></td>
+      <td><b>${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br><small style="color:var(--gris)">${esc(e.asunto)}</small></td>
+      <td><small>${esc(e.correo)}</small></td>
+      <td style="text-align:center">${
+        (e.archivos && e.archivos.length)
+          ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="color:var(--navy)">📎</a>`).join(' ')
+          : 0
+      }</td>
+      <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
+      <td>
+        <div class="admin-actions">
+          <select onchange="cambiarEstadoExpediente('${e.codigo_seguimiento}', this.value)">
+            ${Object.keys(ESTADOS).map(k => `<option value="${k}" ${e.estado === k ? 'selected' : ''}>${ESTADOS[k].l}</option>`).join('')}
+          </select>
+          <button class="btn-print-tbl" title="Imprimir Ticket" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>🖨</button>
+          ${perfilActual?.rol === 'administrador' ? `<button class="btn-del" title="Eliminar" onclick="eliminarExpediente('${e.codigo_seguimiento}')">✕</button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+$('#fFiltroEstado').addEventListener('change', renderAdminTable);
+
+window.imprimirTicketInterno = async (codSeg) => {
+  const lista = await loadExpAuth();
+  const exp = lista.find(x => x.codigo_seguimiento === codSeg);
+  if(exp) abrirTicket(exp);
+};
+
+window.cambiarEstadoExpediente = async (codSeg, nuevoEstado) => {
+  const { error } = await _supabase.from(TABLA_EXPEDIENTES).update({ estado: nuevoEstado }).eq('codigo_seguimiento', codSeg);
+  if(!error) { renderAdminTable(); toast(`Estado actualizado a: ${ESTADOS[nuevoEstado].l}`, 'ok'); }
+  else toast('Error al actualizar: ' + error.message, 'err');
+};
+
+window.eliminarExpediente = async (codSeg) => {
+  if(!confirm('¿Eliminar este expediente?')) return;
+  const { error } = await _supabase.from(TABLA_EXPEDIENTES).delete().eq('codigo_seguimiento', codSeg);
+  if(!error) { renderAdminTable(); toast('Expediente eliminado.', 'ok'); }
+  else toast('Error al eliminar: ' + error.message, 'err');
+};
+
+/* Panel Dirección */
+async function renderDireccionTable(){
+  const lista = await loadExpAuth();
+  const visibles = lista.filter(x => ['derivado','observado','resuelto'].includes(x.estado));
+  $('#dirDerivados').textContent = visibles.filter(x => x.estado==='derivado').length;
+  $('#dirObservados').textContent = visibles.filter(x => x.estado==='observado').length;
+  $('#dirResueltos').textContent = visibles.filter(x => x.estado==='resuelto').length;
+  $('#dirTotal').textContent = visibles.length;
+
+  const tbody = $('#tblDireccion');
+  if(!visibles.length){ tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:1.2rem">No hay expedientes derivados a Dirección.</td></tr>'; return; }
   
-  $('#statTotal').dataset.target = lista.length;
-  $('#statResueltos').dataset.target = resueltos;
-  $('#statTipos').dataset.target = Object.keys(TRAMITES).length;
-  $('#statTiempo').dataset.target = 48;
-  if(statsAnimado) pintarNums();
+  tbody.innerHTML = visibles.map(e => `<tr>
+    <td><b class="mono">${esc(e.numero_expediente || e.codigo)}</b><br><small>${fmtFecha(e.fecha)}</small></td>
+    <td><b>${esc(e.nombre)}</b><br><small>DNI ${esc(e.dni||'—')}</small></td>
+    <td><b>${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br><small>${esc(e.asunto||'')}</small></td>
+    <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
+    <td><div class="admin-actions">
+      <button class="btn-mini" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>
+      <button class="btn-mini" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>
+      <button class="btn-mini" onclick="decisionDireccion('${e.codigo_seguimiento}','revision')">↩ Devolver</button>
+      <button class="btn-print-tbl" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>🖨</button>
+    </div></td>
+  </tr>`).join('');
+}
+window.decisionDireccion = async (codSeg, estado) => {
+  const { error } = await _supabase.from(TABLA_EXPEDIENTES).update({estado}).eq('codigo_seguimiento', codSeg);
+  if(!error){ toast(`Expediente actualizado a ${ESTADOS[estado]?.l || estado}.`,'ok'); renderDireccionTable(); }
+};
+
+/* Panel Administrador */
+async function renderAdminDashboard(){
+  const [expedientes, usuariosResp] = await Promise.all([
+    loadExpAuth(),
+    _supabase.from('usuarios_sistema').select('id', {count:'exact'})
+  ]);
+  $('#admTotalExp').textContent = expedientes.length;
+  $('#admPendientes').textContent = expedientes.filter(x => ['recepcionado','revision','derivado','observado'].includes(x.estado)).length;
+  $('#admResueltos').textContent = expedientes.filter(x => x.estado==='resuelto').length;
+  $('#admUsuarios').textContent = usuariosResp.count ?? (usuariosResp.data?.length || 0);
 }
 
-function pintarNums(){
-  document.querySelectorAll('[data-count]').forEach(el => {
-    const target = parseInt(el.dataset.target || '0', 10);
-    const inicio = performance.now(), dur = 1200;
-    function paso(t){
-      const p = Math.min((t-inicio)/dur, 1), ease = 1 - Math.pow(1-p, 3);
-      el.textContent = Math.round(target*ease).toLocaleString('es-PE');
-      if(p < 1) requestAnimationFrame(paso);
-    }
-    requestAnimationFrame(paso);
-  });
+async function renderUsuariosSistema(){
+  const tbody = $('#tblUsuariosSistema');
+  const { data, error } = await _supabase.from('usuarios_sistema').select('*').order('nombre_completo', {ascending:true});
+  if(error || !data?.length){ tbody.innerHTML = '<tr><td colspan="6">No hay usuarios registrados.</td></tr>'; return; }
+  tbody.innerHTML = data.map(u => `<tr>
+    <td><b>${esc(u.nombre_completo || '—')}</b></td>
+    <td class="mono">${esc(u.correo || '—')}</td>
+    <td>${esc(u.cargo || '—')}</td>
+    <td>${esc(u.rol || '—')}</td>
+    <td><span class="badge ${u.activo === false ? 'observado' : 'resuelto'}">${u.activo === false ? 'Inactivo' : 'Activo'}</span></td>
+    <td><button class="btn-mini ${u.activo === false ? '' : 'danger'}" onclick="cambiarActivoUsuario(${u.id}, ${u.activo === false})">${u.activo === false ? 'Activar' : 'Desactivar'}</button></td>
+  </tr>`).join('');
 }
-let statsAnimado = false;
-window.buscar = buscar;
 
-/* ══════════ Revelado al hacer scroll ══════════ */
+window.cambiarActivoUsuario = async (id, activo) => {
+  const { error } = await _supabase.from('usuarios_sistema').update({activo, updated_at:new Date().toISOString()}).eq('id', id);
+  if(!error){ toast('Estado de usuario actualizado.', 'ok'); renderUsuariosSistema(); }
+};
+
+window.mostrarAltaUsuario = () => {
+  const box = $('#altaUsuarioBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+};
+
+/* Exportar Excel */
+async function exportarReporte(){
+  const lista = await loadExpAuth();
+  const filtro = $('#fFiltroEstado').value;
+  const filtrados = lista.filter(e => filtro === 'todos' ? true : e.estado === filtro);
+
+  if(!filtrados.length){ toast('No hay datos para exportar.', 'err'); return; }
+
+  const filas = filtrados.map(e => ({
+    'N° Expediente': e.numero_expediente || e.codigo || '',
+    'Código de seguimiento': e.codigo_seguimiento || '',
+    'Fecha': fmtFecha(e.fecha),
+    'Hora': fmtHora(e.fecha),
+    'Condición': e.condicion || '',
+    'Trámite': TRAMITES[e.tipo]?.n || e.tipo,
+    'Solicitante': e.nombre,
+    'DNI': e.dni || '',
+    'Correo': e.correo || '',
+    'Celular': e.celular || '',
+    'Estudiante': e.estudiante || '',
+    'Asunto': e.asunto || '',
+    'Estado': ESTADOS[e.estado]?.l || e.estado,
+    'N° Adjuntos': Array.isArray(e.archivos) ? e.archivos.length : 0
+  }));
+
+  const hoja = XLSX.utils.json_to_sheet(filas);
+  const libro = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(libro, hoja, 'Expedientes');
+  XLSX.writeFile(libro, `reporte-mesa-partes-${new Date().toISOString().slice(0,10)}.xlsx`);
+  toast(`✓ Reporte exportado (${filtrados.length} registros).`, 'ok');
+}
+window.exportarReporte = exportarReporte;
+
+/* Restauración de sesión al cargar */
+_supabase.auth.getSession().then(({data:{session}})=>{
+  if(session?.user) abrirPanelSegunRol(session.user);
+});
+
+/* Animaciones */
 const obs = new IntersectionObserver(entries => {
-  entries.forEach(en => {
-    if(en.isIntersecting){
-      en.target.classList.add('in');
-      if(en.target.id === 'statsBand' && !statsAnimado){ statsAnimado = true; pintarNums(); }
-      obs.unobserve(en.target);
-    }
-  });
+  entries.forEach(en => { if(en.isIntersecting) en.target.classList.add('in'); });
 }, { threshold: .12 });
-document.querySelectorAll('.reveal, #statsBand').forEach(el => obs.observe(el));
-
-refrescar();
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
