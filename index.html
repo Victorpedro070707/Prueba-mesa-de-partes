@@ -903,7 +903,7 @@ function validar(){
   return ok;
 }
 
-/* ══════════ Dictado por voz (Multiplataforma) ══════════ */
+/* ══════════ Dictado por voz corregido para Android / Chrome ══════════ */
 (function(){
   const btn = document.getElementById('btnVozDetalle');
   const campo = document.getElementById('fDetalle');
@@ -914,94 +914,77 @@ function validar(){
   if(!SR){
     btn.addEventListener('click', () => {
       status.className = 'voz-status error';
-      status.textContent = 'Dictado no soportado en este navegador.';
-      toast('Prueba con Google Chrome en Android/PC.', 'err');
+      status.textContent = 'Dictado no disponible en este navegador.';
+      toast('Prueba con Google Chrome.', 'err');
     });
     return;
   }
 
-  const recognition = new SR();
-  recognition.lang = 'es-PE';
-  recognition.continuous = true;
-  recognition.interimResults = true;
-
+  let recognition = null;
   let activo = false;
-  let base = '';
-
-  function limpiarTexto(t){
-    return String(t || '').replace(/\s+/g,' ').trim();
-  }
-
-  function unirSinDuplicar(anterior, nuevo){
-    anterior = limpiarTexto(anterior);
-    nuevo = limpiarTexto(nuevo);
-    if(!anterior) return nuevo;
-    if(!nuevo) return anterior;
-    const a = anterior.toLocaleLowerCase('es-PE');
-    const b = nuevo.toLocaleLowerCase('es-PE');
-    if(b === a || b.startsWith(a + ' ')) return nuevo;
-    if(a.startsWith(b + ' ')) return anterior;
-    if(a.includes(b)) return anterior;
-
-    const wa = anterior.split(' ');
-    const wb = nuevo.split(' ');
-    const max = Math.min(wa.length, wb.length);
-    let solape = 0;
-    for(let n = max; n >= 1; n--){
-      const cola = wa.slice(-n).join(' ').toLocaleLowerCase('es-PE');
-      const cabeza = wb.slice(0, n).join(' ').toLocaleLowerCase('es-PE');
-      if(cola === cabeza){ solape = n; break; }
-    }
-    return limpiarTexto(anterior + ' ' + wb.slice(solape).join(' '));
-  }
 
   btn.addEventListener('click', () => {
-    if(activo){ recognition.stop(); return; }
-    base = campo.value.trim();
-    try{ recognition.start(); }catch(e){}
+    if(activo){
+      if(recognition) recognition.stop();
+      return;
+    }
+
+    try {
+      recognition = new SR();
+      recognition.lang = 'es-PE';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        activo = true;
+        btn.classList.add('escuchando');
+        btn.querySelector('.mic-icon').textContent = '🔴';
+        btn.querySelector('.voz-label').textContent = 'Escuchando';
+        status.className = 'voz-status activo';
+        status.textContent = '● Habla ahora...';
+      };
+
+      recognition.onresult = (event) => {
+        let textoDictado = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          if (event.results[i].isFinal) {
+            textoDictado += event.results[i][0].transcript;
+          }
+        }
+        
+        textoDictado = textoDictado.trim();
+        if (textoDictado) {
+          const anterior = campo.value.trim();
+          campo.value = anterior ? anterior + ' ' + textoDictado : textoDictado;
+          campo.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      };
+
+      recognition.onerror = () => {
+        status.className = 'voz-status error';
+        status.textContent = 'No se detectó audio.';
+      };
+
+      recognition.onend = () => {
+        activo = false;
+        btn.classList.remove('escuchando');
+        btn.querySelector('.mic-icon').textContent = '🎙️';
+        btn.querySelector('.voz-label').textContent = 'Dictar';
+        if (campo.value.trim()) {
+          status.className = 'voz-status ok';
+          status.textContent = '✓ Dictado añadido con éxito.';
+        } else {
+          status.className = 'voz-status';
+          status.textContent = '';
+        }
+      };
+
+      recognition.start();
+    } catch(err) {
+      console.error(err);
+      activo = false;
+    }
   });
-
-  recognition.onstart = () => {
-    activo = true;
-    btn.classList.add('escuchando');
-    btn.querySelector('.mic-icon').textContent = '🔴';
-    btn.querySelector('.voz-label').textContent = 'Escuchando';
-    status.className = 'voz-status activo';
-    status.textContent = '● Escuchando… habla ahora';
-  };
-
-  recognition.onresult = (event) => {
-    let definitivo = '';
-    let provisional = '';
-    for(let i = 0; i < event.results.length; i++){
-      const texto = event.results[i][0].transcript;
-      if(event.results[i].isFinal) definitivo = unirSinDuplicar(definitivo, texto);
-      else provisional = unirSinDuplicar(provisional, texto);
-    }
-    const dictado = unirSinDuplicar(definitivo, provisional);
-    const separador = base ? (/[.!?]$/.test(base) ? ' ' : '. ') : '';
-    campo.value = limpiarTexto(base + separador + dictado);
-    campo.dispatchEvent(new Event('input', {bubbles:true}));
-  };
-
-  recognition.onerror = (event) => {
-    status.className = 'voz-status error';
-    status.textContent = 'Micrófono detenido o sin audio.';
-  };
-
-  recognition.onend = () => {
-    activo = false;
-    btn.classList.remove('escuchando');
-    btn.querySelector('.mic-icon').textContent = '🎙️';
-    btn.querySelector('.voz-label').textContent = 'Dictar';
-    if(campo.value.trim()){
-      status.className = 'voz-status ok';
-      status.textContent = '✓ Dictado incorporado.';
-    } else {
-      status.className = 'voz-status';
-      status.textContent = '';
-    }
-  };
 })();
 
 /* Envío Seguro del Formulario */
@@ -1049,12 +1032,10 @@ $('#frm').addEventListener('submit', async e => {
 
     if(insertErr) throw insertErr;
 
-    // Obtenemos los datos completos del expediente generado mediante la función segura
     const { data: expGuardado, error: rpcErr } = await _supabase
       .rpc('consultar_expediente_publico', { p_codigo: codigo_seguimiento });
 
     if(rpcErr || !expGuardado){
-      // Si la RPC tarda, mostramos el modal con los datos básicos
       abrirTicket({ ...nuevoExp, numero_expediente: 'Generado' });
     } else {
       abrirTicket({ ...nuevoExp, ...expGuardado });
