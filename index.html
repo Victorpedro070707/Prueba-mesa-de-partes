@@ -299,10 +299,9 @@
   .detalle-label{font-size:.8rem;font-weight:700;letter-spacing:.02em}
   .btn-voz{background:var(--card);color:var(--ink);border:2px solid var(--ink);padding:.38rem .7rem;cursor:pointer;font-family:'Space Mono',monospace;font-size:.66rem;font-weight:700;display:inline-flex;align-items:center;gap:.35rem}
   .btn-voz:hover{background:var(--gold-soft);box-shadow:3px 3px 0 var(--gold)}
-  .btn-voz.escuchando{background:#fff0ee;color:var(--red);border-color:var(--red);animation:vozPulse 1.2s infinite}
+  .btn-voz.escuchando{background:#fff0ee;color:var(--red);border-color:var(--red)}
   .voz-status{min-height:1rem;margin-top:.3rem;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--gris)}
   .voz-status.activo{color:var(--red);font-weight:700}.voz-status.ok{color:var(--green);font-weight:700}.voz-status.error{color:var(--red);font-weight:700}
-  @keyframes vozPulse{50%{box-shadow:0 0 0 6px rgba(196,59,46,.12)}}
 </style>
 </head>
 <body>
@@ -498,8 +497,17 @@
     <div class="panel-subhead"><h3>📂 Expedientes para decisión</h3><button class="btn btn-light" style="font-size:.75rem;padding:.45rem .8rem" onclick="renderDireccionTable()">↻ Actualizar</button></div>
     <div class="dir-table-wrap">
       <table class="admin-table">
-        <thead><tr><th>Expediente</th><th>Solicitante</th><th>Trámite / Asunto</th><th>Estado</th><th>Decisión Directiva</th></tr></thead>
-        <tbody id="tblDireccion"><tr><td colspan="5">Cargando…</td></tr></tbody>
+        <thead>
+          <tr>
+            <th>Expediente</th>
+            <th>Solicitante</th>
+            <th>Trámite / Asunto y Motivo</th>
+            <th>Adjuntos</th>
+            <th>Estado</th>
+            <th>Decisión Directiva</th>
+          </tr>
+        </thead>
+        <tbody id="tblDireccion"><tr><td colspan="6">Cargando…</td></tr></tbody>
       </table>
     </div>
   </section>
@@ -1286,30 +1294,60 @@ window.eliminarExpediente = async (codSeg) => {
   else toast('Error al eliminar: ' + error.message, 'err');
 };
 
-/* Panel Dirección */
+/* Panel Dirección con Vista de Motivo y Archivos Adjuntos */
 async function renderDireccionTable(){
+  if(perfilActual?.rol !== 'direccion' && perfilActual?.rol !== 'administrador') return;
+  
   const lista = await loadExpAuth();
   const visibles = lista.filter(x => ['derivado','observado','resuelto'].includes(x.estado));
+  
   $('#dirDerivados').textContent = visibles.filter(x => x.estado==='derivado').length;
   $('#dirObservados').textContent = visibles.filter(x => x.estado==='observado').length;
   $('#dirResueltos').textContent = visibles.filter(x => x.estado==='resuelto').length;
   $('#dirTotal').textContent = visibles.length;
 
   const tbody = $('#tblDireccion');
-  if(!visibles.length){ tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:1.2rem">No hay expedientes derivados a Dirección.</td></tr>'; return; }
+  if(!visibles.length){ 
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:1.2rem;color:var(--gris)">No hay expedientes en la bandeja de Dirección.</td></tr>'; 
+    return; 
+  }
   
-  tbody.innerHTML = visibles.map(e => `<tr>
-    <td><b class="mono">${esc(e.numero_expediente || e.codigo)}</b><br><small>${fmtFecha(e.fecha)}</small></td>
-    <td><b>${esc(e.nombre)}</b><br><small>DNI ${esc(e.dni||'—')}</small></td>
-    <td><b>${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br><small>${esc(e.asunto||'')}</small></td>
-    <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
-    <td><div class="admin-actions">
-      <button class="btn-mini success" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>
-      <button class="btn-mini danger" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>
-      <button class="btn-mini" onclick="decisionDireccion('${e.codigo_seguimiento}','revision')">↩ Devolver</button>
-      <button class="btn-print-tbl" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>🖨</button>
-    </div></td>
-  </tr>`).join('');
+  tbody.innerHTML = visibles.map(e => `
+    <tr>
+      <td>
+        <b class="mono">${esc(e.numero_expediente || e.codigo)}</b><br>
+        <small style="color:var(--gris)">${fmtFecha(e.fecha)} · ${fmtHora(e.fecha)}</small>
+      </td>
+      <td>
+        <b>${esc(e.nombre)}</b><br>
+        <small style="color:var(--gris)">DNI: ${esc(e.dni || '—')}</small>
+        ${e.estudiante ? `<br><small style="color:var(--navy)">Est: ${esc(e.estudiante)}</small>` : ''}
+      </td>
+      <td>
+        <b style="color:var(--navy)">${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br>
+        <strong>Asunto:</strong> ${esc(e.asunto || '—')}<br>
+        <div style="margin-top:.35rem;padding:.4rem .6rem;background:#f5f8fa;border-left:3px solid var(--navy);font-size:.78rem;color:#333;max-width:320px;white-space:pre-wrap;">
+          <strong>Motivo:</strong> ${esc(e.detalle || 'Sin detalle')}
+        </div>
+      </td>
+      <td style="text-align:center">
+        ${
+          (e.archivos && e.archivos.length)
+            ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="display:inline-block;margin:2px;padding:.2rem .4rem;background:var(--card);border:1px solid var(--ink);border-radius:3px;text-decoration:none;color:var(--navy);font-size:.75rem;font-weight:700">📎 ${esc(a.nombre.length > 12 ? a.nombre.slice(0,10)+'…' : a.nombre)}</a>`).join('')
+            : '<span style="color:var(--gris);font-size:.75rem">Sin adjuntos</span>'
+        }
+      </td>
+      <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
+      <td>
+        <div class="admin-actions">
+          <button class="btn-mini success" title="Aprobar y Resolver trámite" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>
+          <button class="btn-mini danger" title="Observar por motivos legales/académicos" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>
+          <button class="btn-mini" title="Devolver expediente a Secretaría" onclick="decisionDireccion('${e.codigo_seguimiento}','revision')">↩ Devolver</button>
+          <button class="btn-print-tbl" title="Ver comprobante completo" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>👁 Ver</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
 }
 window.decisionDireccion = async (codSeg, estado) => {
   const { error } = await _supabase.from(TABLA_EXPEDIENTES).update({estado}).eq('codigo_seguimiento', codSeg);
