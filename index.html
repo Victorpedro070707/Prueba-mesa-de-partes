@@ -161,7 +161,7 @@
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
   .exp-head{display:flex;justify-content:space-between;gap:1rem;align-items:flex-start;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:.9rem;margin-bottom:1.1rem}
   .exp-head .code{font-family:'Space Mono',monospace;font-size:1.25rem;font-weight:700}
-  .badge{font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .7rem;color:#fff;display:inline-block}
+  .badge{font-family:'Space Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;padding:.35rem .7rem;color:#fff;display:inline-block;border-radius:2px}
   .badge.recepcionado{background:var(--navy)} .badge.revision{background:#B47B02}
   .badge.derivado{background:#3E5F82} .badge.observado{background:var(--red)} .badge.resuelto{background:var(--green)}
   .exp-datos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;font-size:.82rem;margin-bottom:1.3rem}
@@ -195,11 +195,10 @@
   .admin-table th{background:var(--navy);color:#fff;padding:.8rem .9rem;font-family:'Space Mono',monospace;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
   .admin-table td{padding:.8rem .9rem;border-bottom:1px solid rgba(15,34,51,.15);vertical-align:middle}
   .admin-table tr:hover{background:var(--gold-soft)}
-  .admin-actions{display:flex;gap:.4rem;align-items:center}
-  .admin-actions select{padding:.3rem .4rem;font-size:.75rem;border:1px solid var(--ink);background:#fff;cursor:pointer}
-  .btn-print-tbl{background:var(--card);border:1px solid var(--ink);padding:.3rem .5rem;font-size:.75rem;cursor:pointer}
+  .admin-actions{display:flex;gap:.35rem;align-items:center;flex-wrap:wrap}
+  .btn-print-tbl{background:var(--card);border:1.5px solid var(--ink);padding:.35rem .55rem;font-size:.75rem;cursor:pointer}
   .btn-print-tbl:hover{background:var(--gold-soft)}
-  .btn-del{background:var(--red);color:#fff;border:0;padding:.3rem .5rem;font-size:.75rem;cursor:pointer;font-weight:700}
+  .btn-del{background:var(--red);color:#fff;border:0;padding:.35rem .55rem;font-size:.75rem;cursor:pointer;font-weight:700}
   .btn-del:hover{opacity:.85}
 
   .role-shell{display:none;margin-top:2.5rem}
@@ -217,9 +216,11 @@
   .user-table{width:100%;border-collapse:collapse;font-size:.8rem}
   .user-table th{background:var(--navy);color:#fff;text-align:left;padding:.7rem;font-family:'Space Mono',monospace;font-size:.65rem;text-transform:uppercase;white-space:nowrap}
   .user-table td{padding:.7rem;border-bottom:1px solid rgba(15,34,51,.15);vertical-align:middle}
-  .btn-mini{border:1.5px solid var(--ink);background:var(--card);padding:.35rem .55rem;font-size:.72rem;font-weight:700;cursor:pointer}
+  .btn-mini{border:1.5px solid var(--ink);background:var(--card);padding:.35rem .55rem;font-size:.72rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:.3rem}
   .btn-mini:hover{background:var(--gold-soft)}
   .btn-mini.danger{background:#fff0ee;color:var(--red);border-color:var(--red)}
+  .btn-mini.success{background:#edf7ed;color:var(--green);border-color:var(--green)}
+  .btn-mini.action-deriv{background:var(--gold-soft);color:var(--ink);border-color:var(--ink)}
 
   /* ── Comunicados ── */
   .com-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:2rem;align-items:start}
@@ -432,7 +433,7 @@
             <th>Contacto</th>
             <th>Adj.</th>
             <th>Estado</th>
-            <th>Acciones</th>
+            <th>Acciones de Secretaría</th>
           </tr>
         </thead>
         <tbody id="tblAdminExp">
@@ -1046,7 +1047,6 @@ async function buscar(code){
   const consulta = code.trim().toUpperCase();
   if(!consulta){ toast('Ingresa tu código de seguimiento.','err'); return; }
 
-  // Llamada a la función segura RPC en Supabase
   const { data: exp, error } = await _supabase.rpc('consultar_expediente_publico', { p_codigo: consulta });
 
   res.classList.add('show');
@@ -1172,7 +1172,7 @@ async function cerrarAdminSession(){
 }
 window.cerrarAdminSession = cerrarAdminSession;
 
-/* Render de Tablas Internas */
+/* Render de Tablas Internas con Botones Rápidos (Secretaría / Administrador) */
 async function renderAdminTable(){
   const lista = await loadExpAuth();
   const filtro = $('#fFiltroEstado').value;
@@ -1193,15 +1193,16 @@ async function renderAdminTable(){
       <td><small>${esc(e.correo)}</small></td>
       <td style="text-align:center">${
         (e.archivos && e.archivos.length)
-          ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="color:var(--navy)">📎</a>`).join(' ')
-          : 0
+          ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="color:var(--navy);font-size:1.1rem">📎</a>`).join(' ')
+          : '<span style="color:var(--gris)">—</span>'
       }</td>
       <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
       <td>
         <div class="admin-actions">
-          <select onchange="cambiarEstadoExpediente('${e.codigo_seguimiento}', this.value)">
-            ${Object.keys(ESTADOS).map(k => `<option value="${k}" ${e.estado === k ? 'selected' : ''}>${ESTADOS[k].l}</option>`).join('')}
-          </select>
+          ${e.estado !== 'derivado' ? `<button class="btn-mini action-deriv" title="Derivar expediente a Dirección" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'derivado')">📨 Derivar</button>` : ''}
+          ${e.estado === 'recepcionado' ? `<button class="btn-mini" title="Poner en revisión" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'revision')">🔍 Revisar</button>` : ''}
+          ${e.estado !== 'observado' && e.estado !== 'resuelto' ? `<button class="btn-mini danger" title="Observar por requisitos" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'observado')">⚠ Observar</button>` : ''}
+          ${['cert','const'].includes(e.tipo) && e.estado !== 'resuelto' ? `<button class="btn-mini success" title="Resolver trámite directo" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'resuelto')">✓ Resolver</button>` : ''}
           <button class="btn-print-tbl" title="Imprimir Ticket" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>🖨</button>
           ${perfilActual?.rol === 'administrador' ? `<button class="btn-del" title="Eliminar" onclick="eliminarExpediente('${e.codigo_seguimiento}')">✕</button>` : ''}
         </div>
@@ -1248,8 +1249,8 @@ async function renderDireccionTable(){
     <td><b>${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br><small>${esc(e.asunto||'')}</small></td>
     <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
     <td><div class="admin-actions">
-      <button class="btn-mini" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>
-      <button class="btn-mini" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>
+      <button class="btn-mini success" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>
+      <button class="btn-mini danger" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>
       <button class="btn-mini" onclick="decisionDireccion('${e.codigo_seguimiento}','revision')">↩ Devolver</button>
       <button class="btn-print-tbl" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>🖨</button>
     </div></td>
