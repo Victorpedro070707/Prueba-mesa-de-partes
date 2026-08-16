@@ -816,7 +816,6 @@ function tick(){
 }
 tick(); setInterval(tick, 1000);
 
-/* Generador de código personal criptográfico */
 function generarCodigoSeguimiento(){
   const caracteres = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   const bloque = () => {
@@ -904,41 +903,108 @@ function validar(){
   return ok;
 }
 
-/* Dictado por voz */
+/* ══════════ Dictado por voz (Multiplataforma) ══════════ */
 (function(){
-  const btn=document.getElementById('btnVozDetalle'), campo=document.getElementById('fDetalle'), status=document.getElementById('vozStatus');
+  const btn = document.getElementById('btnVozDetalle');
+  const campo = document.getElementById('fDetalle');
+  const status = document.getElementById('vozStatus');
   if(!btn || !campo || !status) return;
-  const SR=window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){
-    btn.addEventListener('click',()=>{ status.className='voz-status error'; status.textContent='Dictado no soportado en este navegador.'; toast('Prueba en Google Chrome.','err'); });
+    btn.addEventListener('click', () => {
+      status.className = 'voz-status error';
+      status.textContent = 'Dictado no soportado en este navegador.';
+      toast('Prueba con Google Chrome en Android/PC.', 'err');
+    });
     return;
   }
-  const recognition=new SR();
-  recognition.lang='es-PE'; recognition.continuous=true; recognition.interimResults=true;
-  let activo=false, base='';
-  btn.addEventListener('click',()=>{
+
+  const recognition = new SR();
+  recognition.lang = 'es-PE';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  let activo = false;
+  let base = '';
+
+  function limpiarTexto(t){
+    return String(t || '').replace(/\s+/g,' ').trim();
+  }
+
+  function unirSinDuplicar(anterior, nuevo){
+    anterior = limpiarTexto(anterior);
+    nuevo = limpiarTexto(nuevo);
+    if(!anterior) return nuevo;
+    if(!nuevo) return anterior;
+    const a = anterior.toLocaleLowerCase('es-PE');
+    const b = nuevo.toLocaleLowerCase('es-PE');
+    if(b === a || b.startsWith(a + ' ')) return nuevo;
+    if(a.startsWith(b + ' ')) return anterior;
+    if(a.includes(b)) return anterior;
+
+    const wa = anterior.split(' ');
+    const wb = nuevo.split(' ');
+    const max = Math.min(wa.length, wb.length);
+    let solape = 0;
+    for(let n = max; n >= 1; n--){
+      const cola = wa.slice(-n).join(' ').toLocaleLowerCase('es-PE');
+      const cabeza = wb.slice(0, n).join(' ').toLocaleLowerCase('es-PE');
+      if(cola === cabeza){ solape = n; break; }
+    }
+    return limpiarTexto(anterior + ' ' + wb.slice(solape).join(' '));
+  }
+
+  btn.addEventListener('click', () => {
     if(activo){ recognition.stop(); return; }
-    base=campo.value.trim();
+    base = campo.value.trim();
     try{ recognition.start(); }catch(e){}
   });
-  recognition.onstart=()=>{
-    activo=true; btn.classList.add('escuchando');
-    btn.querySelector('.mic-icon').textContent='🔴'; btn.querySelector('.voz-label').textContent='Escuchando';
-    status.className='voz-status activo'; status.textContent='● Escuchando… habla ahora';
+
+  recognition.onstart = () => {
+    activo = true;
+    btn.classList.add('escuchando');
+    btn.querySelector('.mic-icon').textContent = '🔴';
+    btn.querySelector('.voz-label').textContent = 'Escuchando';
+    status.className = 'voz-status activo';
+    status.textContent = '● Escuchando… habla ahora';
   };
-  recognition.onresult=e=>{
-    let prov='';
-    for(let i=0;i<e.results.length;i++) prov += e.results[i][0].transcript;
-    campo.value = base ? base + ' ' + prov : prov;
+
+  recognition.onresult = (event) => {
+    let definitivo = '';
+    let provisional = '';
+    for(let i = 0; i < event.results.length; i++){
+      const texto = event.results[i][0].transcript;
+      if(event.results[i].isFinal) definitivo = unirSinDuplicar(definitivo, texto);
+      else provisional = unirSinDuplicar(provisional, texto);
+    }
+    const dictado = unirSinDuplicar(definitivo, provisional);
+    const separador = base ? (/[.!?]$/.test(base) ? ' ' : '. ') : '';
+    campo.value = limpiarTexto(base + separador + dictado);
+    campo.dispatchEvent(new Event('input', {bubbles:true}));
   };
-  recognition.onend=()=>{
-    activo=false; btn.classList.remove('escuchando');
-    btn.querySelector('.mic-icon').textContent='🎙️'; btn.querySelector('.voz-label').textContent='Dictar';
-    status.className='voz-status ok'; status.textContent='✓ Dictado incorporado.';
+
+  recognition.onerror = (event) => {
+    status.className = 'voz-status error';
+    status.textContent = 'Micrófono detenido o sin audio.';
+  };
+
+  recognition.onend = () => {
+    activo = false;
+    btn.classList.remove('escuchando');
+    btn.querySelector('.mic-icon').textContent = '🎙️';
+    btn.querySelector('.voz-label').textContent = 'Dictar';
+    if(campo.value.trim()){
+      status.className = 'voz-status ok';
+      status.textContent = '✓ Dictado incorporado.';
+    } else {
+      status.className = 'voz-status';
+      status.textContent = '';
+    }
   };
 })();
 
-/* Envío a Supabase (Trigger asigna el número de expediente en el servidor) */
+/* Envío Seguro del Formulario */
 $('#frm').addEventListener('submit', async e => {
   e.preventDefault();
   if(!validar()) return;
@@ -977,15 +1043,23 @@ $('#frm').addEventListener('submit', async e => {
       archivos: archivosSubidos
     };
 
-    const { data: guardado, error } = await _supabase
+    const { error: insertErr } = await _supabase
       .from(TABLA_EXPEDIENTES)
-      .insert([nuevoExp])
-      .select()
-      .single();
+      .insert([nuevoExp]);
 
-    if(error) throw error;
+    if(insertErr) throw insertErr;
 
-    abrirTicket(guardado);
+    // Obtenemos los datos completos del expediente generado mediante la función segura
+    const { data: expGuardado, error: rpcErr } = await _supabase
+      .rpc('consultar_expediente_publico', { p_codigo: codigo_seguimiento });
+
+    if(rpcErr || !expGuardado){
+      // Si la RPC tarda, mostramos el modal con los datos básicos
+      abrirTicket({ ...nuevoExp, numero_expediente: 'Generado' });
+    } else {
+      abrirTicket({ ...nuevoExp, ...expGuardado });
+    }
+
     $('#frm').reset();
     archivos = [];
     pintarChips();
@@ -1000,7 +1074,7 @@ $('#frm').addEventListener('submit', async e => {
   }
 });
 
-/* ══════════ Ticket / Comprobante ══════════ */
+/* ══════════ Modal / Ticket ══════════ */
 const modal = $('#modal');
 function abrirTicket(exp){
   $('#tNumero').textContent = exp.numero_expediente || exp.codigo || '—';
@@ -1172,7 +1246,7 @@ async function cerrarAdminSession(){
 }
 window.cerrarAdminSession = cerrarAdminSession;
 
-/* Render de Tablas Internas con Botones Rápidos (Secretaría / Administrador) */
+/* Render de Tablas Internas (Secretaría / Administrador) */
 async function renderAdminTable(){
   const lista = await loadExpAuth();
   const filtro = $('#fFiltroEstado').value;
@@ -1199,7 +1273,7 @@ async function renderAdminTable(){
       <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
       <td>
         <div class="admin-actions">
-          ${e.estado !== 'derivado' ? `<button class="btn-mini action-deriv" title="Derivar expediente a Dirección" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'derivado')">📨 Derivar</button>` : ''}
+          ${e.estado !== 'derivado' ? `<button class="btn-mini action-deriv" title="Derivar a Dirección" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'derivado')">📨 Derivar</button>` : ''}
           ${e.estado === 'recepcionado' ? `<button class="btn-mini" title="Poner en revisión" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'revision')">🔍 Revisar</button>` : ''}
           ${e.estado !== 'observado' && e.estado !== 'resuelto' ? `<button class="btn-mini danger" title="Observar por requisitos" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'observado')">⚠ Observar</button>` : ''}
           ${['cert','const'].includes(e.tipo) && e.estado !== 'resuelto' ? `<button class="btn-mini success" title="Resolver trámite directo" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'resuelto')">✓ Resolver</button>` : ''}
