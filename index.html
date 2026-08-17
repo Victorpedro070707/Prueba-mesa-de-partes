@@ -872,9 +872,18 @@ drop.addEventListener('drop', e => añadir(e.dataTransfer.files));
 fileInput.addEventListener('change', () => { añadir(fileInput.files); fileInput.value=''; });
 
 function añadir(lista){
+  const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
+  const mimesPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
+
   for(const f of lista){
     if(archivos.length >= 3){ $('#fileErr').style.display='block'; return; }
     if(f.size > 10*1024*1024){ $('#fileErr').style.display='block'; continue; }
+
+    const ext = f.name.split('.').pop().toLowerCase();
+    if (!extensionesPermitidas.includes(ext) || !mimesPermitidos.includes(f.type)) {
+      toast(`Formato no permitido: ${f.name}. Solo PDF, JPG y PNG.`, 'err');
+      continue;
+    }
     archivos.push(f);
   }
   $('#fileErr').style.display = 'none';
@@ -886,12 +895,27 @@ function pintarChips(){
 }
 window.quitarArchivo = i => { archivos.splice(i,1); pintarChips(); };
 
+/* Subida protegida de adjuntos con validación y sanitización */
 async function subirArchivo(codigoSeg, file){
-  const ruta = `${codigoSeg}/${Date.now()}-${file.name}`;
-  const { error } = await _supabase.storage.from(BUCKET_ADJUNTOS).upload(ruta, file);
+  const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
+  const mimesPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
+
+  const nombreLimpio = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const partes = nombreLimpio.split('.');
+  const ext = partes.pop().toLowerCase();
+
+  if (!extensionesPermitidas.includes(ext) || !mimesPermitidos.includes(file.type)) {
+    throw new Error(`Tipo de archivo no permitido (.${ext}). Solo se aceptan documentos PDF e imágenes JPG/PNG.`);
+  }
+
+  const ruta = `${codigoSeg}/${Date.now()}-${partes.join('_')}.${ext}`;
+  const { error } = await _supabase.storage.from(BUCKET_ADJUNTOS).upload(ruta, file, {
+    contentType: file.type,
+    upsert: false
+  });
   if(error) throw error;
   const { data } = _supabase.storage.from(BUCKET_ADJUNTOS).getPublicUrl(ruta);
-  return { nombre: file.name, url: data.publicUrl };
+  return { nombre: nombreLimpio, url: data.publicUrl };
 }
 
 /* ══════════ Validación y Envío ══════════ */
@@ -1020,6 +1044,7 @@ $('#frm').addEventListener('submit', async e => {
         archivosSubidos.push(await subirArchivo(codigo_seguimiento, f));
       }catch(errSub){
         console.error('Error subiendo archivo:', errSub);
+        toast(`Error al subir ${f.name}: ${errSub.message}`, 'err');
       }
     }
 
@@ -1265,44 +1290,34 @@ async function renderAdminTable(){
   }
 
   tbody.innerHTML = filtrados.map(e => {
-    let accionesHtml = '';
-
-    if (e.estado === 'resuelto') {
-      accionesHtml = `<span class="badge resuelto" style="font-size:.7rem;padding:.3rem .5rem">✔ Concluido</span>`;
-    } else if (e.estado === 'derivado') {
-      accionesHtml = `<span class="badge derivado" style="font-size:.65rem;padding:.3rem .5rem">📨 En Dirección</span>`;
-    } else {
-      // Estado: recepcionado, revision u observado
-      accionesHtml = `
-        <button class="btn-mini action-deriv" title="Derivar a Dirección" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'derivado')">📨 Derivar</button>
-        ${e.estado === 'recepcionado' ? `<button class="btn-mini" title="Poner en revisión" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'revision')">🔍 Revisar</button>` : ''}
-        ${e.estado !== 'observado' ? `<button class="btn-mini danger" title="Observar por requisitos" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'observado')">⚠ Observar</button>` : ''}
-        ${['cert','const'].includes(e.tipo) ? `<button class="btn-mini success" title="Resolver trámite directo" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'resuelto')">✓ Resolver</button>` : ''}
-      `;
-    }
+    const esResuelto = e.estado === 'resuelto';
+    const esDerivado = e.estado === 'derivado';
 
     return `
-      <tr>
-        <td><b class="mono">${esc(e.numero_expediente || e.codigo)}</b><br><small class="mono" style="color:var(--red)">${esc(e.codigo_seguimiento)}</small></td>
-        <td>${fmtFecha(e.fecha)}<br><small style="color:var(--gris)">${fmtHora(e.fecha)}</small></td>
-        <td><b>${esc(e.nombre)}</b><br><small style="color:var(--gris)">DNI: ${esc(e.dni || '—')}</small></td>
-        <td><b>${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br><small style="color:var(--gris)">${esc(e.asunto)}</small></td>
-        <td><small>${esc(e.correo)}</small></td>
-        <td style="text-align:center">${
-          (e.archivos && e.archivos.length)
-            ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="color:var(--navy);font-size:1.1rem">📎</a>`).join(' ')
-            : '<span style="color:var(--gris)">—</span>'
-        }</td>
-        <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
-        <td>
-          <div class="admin-actions">
-            ${accionesHtml}
-            <button class="btn-print-tbl" title="Ver ficha completa" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>👁 Ver</button>
-            ${perfilActual?.rol === 'administrador' ? `<button class="btn-del" title="Eliminar" onclick="eliminarExpediente('${e.codigo_seguimiento}')">✕</button>` : ''}
-          </div>
-        </td>
-      </tr>
-    `;
+    <tr>
+      <td><b class="mono">${esc(e.numero_expediente || e.codigo)}</b><br><small class="mono" style="color:var(--red)">${esc(e.codigo_seguimiento)}</small></td>
+      <td>${fmtFecha(e.fecha)}<br><small style="color:var(--gris)">${fmtHora(e.fecha)}</small></td>
+      <td><b>${esc(e.nombre)}</b><br><small style="color:var(--gris)">DNI: ${esc(e.dni || '—')}</small></td>
+      <td><b>${esc(TRAMITES[e.tipo]?.n || e.tipo)}</b><br><small style="color:var(--gris)">${esc(e.asunto)}</small></td>
+      <td><small>${esc(e.correo)}</small></td>
+      <td style="text-align:center">${
+        (e.archivos && e.archivos.length)
+          ? e.archivos.map(a => `<a href="${esc(a.url)}" target="_blank" rel="noopener" title="${esc(a.nombre)}" style="color:var(--navy);font-size:1.1rem">📎</a>`).join(' ')
+          : '<span style="color:var(--gris)">—</span>'
+      }</td>
+      <td><span class="badge ${e.estado}">${ESTADOS[e.estado]?.l || e.estado}</span></td>
+      <td>
+        <div class="admin-actions">
+          ${!esResuelto && !esDerivado ? `<button class="btn-mini action-deriv" title="Derivar a Dirección" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'derivado')">📨 Derivar</button>` : ''}
+          ${!esResuelto && e.estado === 'recepcionado' ? `<button class="btn-mini" title="Poner en revisión" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'revision')">🔍 Revisar</button>` : ''}
+          ${!esResuelto && e.estado !== 'observado' ? `<button class="btn-mini danger" title="Observar por requisitos" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'observado')">⚠ Observar</button>` : ''}
+          ${!esResuelto && ['cert','const'].includes(e.tipo) ? `<button class="btn-mini success" title="Resolver trámite directo" onclick="cambiarEstadoExpediente('${e.codigo_seguimiento}', 'resuelto')">✓ Resolver</button>` : ''}
+          <button class="btn-print-tbl" title="Ver ficha completa" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>👁 Ver</button>
+          ${perfilActual?.rol === 'administrador' ? `<button class="btn-del" title="Eliminar" onclick="eliminarExpediente('${e.codigo_seguimiento}')">✕</button>` : ''}
+        </div>
+      </td>
+    </tr>
+  `;
   }).join('');
 }
 $('#fFiltroEstado').addEventListener('change', renderAdminTable);
@@ -1326,7 +1341,7 @@ window.eliminarExpediente = async (codSeg) => {
   else toast('Error al eliminar: ' + error.message, 'err');
 };
 
-/* ══════════ Panel Dirección (Vista Integral con Detalle y Adjuntos) ══════════ */
+/* ══════════ Panel Dirección ══════════ */
 async function renderDireccionTable(){
   const lista = await loadExpAuth();
   const visibles = lista.filter(x => ['derivado','observado','resuelto'].includes(x.estado));
@@ -1367,8 +1382,8 @@ async function renderDireccionTable(){
     <td>
       <div class="admin-actions">
         ${e.estado !== 'resuelto' ? `<button class="btn-mini success" title="Resolver expediente" onclick="decisionDireccion('${e.codigo_seguimiento}','resuelto')">✓ Resolver</button>` : ''}
-        ${e.estado !== 'observado' && e.estado !== 'resuelto' ? `<button class="btn-mini danger" title="Observar por motivos de fondo" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>` : ''}
-        ${e.estado !== 'resuelto' ? `<button class="btn-mini" title="Devolver a Secretaría" onclick="decisionDireccion('${e.codigo_seguimiento}', 'revision')">↩ Devolver</button>` : ''}
+        ${e.estado !== 'observado' ? `<button class="btn-mini danger" title="Observar por motivos de fondo" onclick="decisionDireccion('${e.codigo_seguimiento}','observado')">⚠ Observar</button>` : ''}
+        <button class="btn-mini" title="Devolver a Secretaría" onclick="decisionDireccion('${e.codigo_seguimiento}','revision')">↩ Devolver</button>
         <button class="btn-mini" title="Ver ficha completa e imprimir" onclick='imprimirTicketInterno("${e.codigo_seguimiento}")'>👁 Ficha</button>
       </div>
     </td>
