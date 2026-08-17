@@ -874,19 +874,33 @@ fileInput.addEventListener('change', () => { añadir(fileInput.files); fileInput
 function añadir(lista){
   const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
   const mimesPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
+  const MAX_PESO = 10 * 1024 * 1024; // 10 MB
 
   for(const f of lista){
-    if(archivos.length >= 3){ $('#fileErr').style.display='block'; return; }
-    if(f.size > 10*1024*1024){ $('#fileErr').style.display='block'; continue; }
+    if(archivos.length >= 3){ 
+      toast('Máximo 3 archivos permitidos.', 'err');
+      $('#fileErr').style.display='block'; 
+      return; 
+    }
+
+    if(f.size > MAX_PESO){ 
+      toast(`El archivo "${f.name}" pesa ${(f.size/1024/1024).toFixed(1)} MB y supera el límite de 10 MB.`, 'err');
+      $('#fileErr').style.display='block'; 
+      continue; 
+    }
 
     const ext = f.name.split('.').pop().toLowerCase();
     if (!extensionesPermitidas.includes(ext) || !mimesPermitidos.includes(f.type)) {
       toast(`Formato no permitido: ${f.name}. Solo PDF, JPG y PNG.`, 'err');
       continue;
     }
+
     archivos.push(f);
   }
-  $('#fileErr').style.display = 'none';
+
+  if(archivos.length <= 3){
+    $('#fileErr').style.display = 'none';
+  }
   pintarChips();
 }
 function pintarChips(){
@@ -895,10 +909,15 @@ function pintarChips(){
 }
 window.quitarArchivo = i => { archivos.splice(i,1); pintarChips(); };
 
-/* Subida protegida de adjuntos con validación y sanitización */
+/* Subida protegida de adjuntos */
 async function subirArchivo(codigoSeg, file){
   const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
   const mimesPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
+  const MAX_PESO = 10 * 1024 * 1024;
+
+  if (file.size > MAX_PESO) {
+    throw new Error(`El archivo excede el tamaño máximo permitido de 10 MB.`);
+  }
 
   const nombreLimpio = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
   const partes = nombreLimpio.split('.');
@@ -1025,7 +1044,7 @@ function validar(){
   });
 })();
 
-/* Envío Seguro del Formulario */
+/* Envío Seguro del Formulario con Bloqueo Estricto de Adjuntos */
 $('#frm').addEventListener('submit', async e => {
   e.preventDefault();
   if(!validar()) return;
@@ -1039,12 +1058,17 @@ $('#frm').addEventListener('submit', async e => {
     const codigo_seguimiento = generarCodigoSeguimiento();
     const archivosSubidos = [];
 
+    // Si hay archivos seleccionados, todos deben subir con éxito o se cancela el registro
     for(const f of archivos){
       try{
-        archivosSubidos.push(await subirArchivo(codigo_seguimiento, f));
+        const subido = await subirArchivo(codigo_seguimiento, f);
+        archivosSubidos.push(subido);
       }catch(errSub){
         console.error('Error subiendo archivo:', errSub);
-        toast(`Error al subir ${f.name}: ${errSub.message}`, 'err');
+        toast(`Error en el archivo "${f.name}": ${errSub.message || 'Excede el límite o formato no permitido.'}`, 'err');
+        btnEnviar.disabled = false;
+        btnEnviar.textContent = txtOriginal;
+        return;
       }
     }
 
