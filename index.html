@@ -131,6 +131,8 @@
   .file-chip{font-family:'Space Mono',monospace;font-size:.68rem;background:var(--ink);color:#fff;padding:.3rem .6rem;display:inline-flex;gap:.5rem;align-items:center}
   .file-chip button{background:none;border:0;color:var(--gold);cursor:pointer;font-family:inherit;font-size:.8rem;line-height:1}
 
+  .file-alert-box{display:none;margin-top:.6rem;padding:.7rem .9rem;background:#FFF0EE;border:1.5px solid var(--red);color:var(--red);font-size:.78rem;font-weight:600}
+
   .form-foot{margin-top:1.4rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
   .btn-send{font-size:1.05rem;padding:1rem 2rem;flex-grow:1;justify-content:center}
   .form-foot small{color:var(--gris);font-size:.72rem;max-width:28ch}
@@ -591,10 +593,10 @@
                   <input type="file" id="fFiles" multiple accept=".pdf,.jpg,.jpeg,.png" aria-label="Adjuntar archivos">
                   <div class="dz-ico">📎</div>
                   <p>Arrastra tus archivos aquí o haz clic para seleccionarlos</p>
-                  <small>DNI, voucher, requisitos… (máx. 3 archivos de hasta 10 MB)</small>
+                  <small>DNI, voucher, requisitos… (máx. 3 archivos de hasta 10 MB cada uno)</small>
                 </div>
                 <div class="file-chips" id="fileChips"></div>
-                <small class="err" id="fileErr" style="display:none;color:var(--red);font-weight:600">Máximo 3 archivos y de hasta 10 MB cada uno.</small>
+                <div class="file-alert-box" id="fileAlertBox"></div>
               </div>
               <div class="field full check">
                 <input type="checkbox" id="fDecl">
@@ -863,51 +865,68 @@ function pintarReqs(){
 selTramite.addEventListener('change', pintarReqs);
 pintarReqs();
 
-/* ══════════ Zona de adjuntos ══════════ */
-const drop = $('#drop'), fileInput = $('#fFiles');
+/* ══════════ Zona de adjuntos con Alertas Claras ══════════ */
+const drop = $('#drop'), fileInput = $('#fFiles'), fileAlertBox = $('#fileAlertBox');
 let archivos = [];
 ['dragover','dragenter'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
 ['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
 drop.addEventListener('drop', e => añadir(e.dataTransfer.files));
 fileInput.addEventListener('change', () => { añadir(fileInput.files); fileInput.value=''; });
 
+function mostrarAlertaArchivo(msg){
+  fileAlertBox.innerHTML = msg;
+  fileAlertBox.style.display = 'block';
+}
+
+function limpiarAlertaArchivo(){
+  fileAlertBox.innerHTML = '';
+  fileAlertBox.style.display = 'none';
+}
+
 function añadir(lista){
   const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
   const mimesPermitidos = ['application/pdf', 'image/jpeg', 'image/png'];
   const MAX_PESO = 10 * 1024 * 1024; // 10 MB
 
+  limpiarAlertaArchivo();
+
   for(const f of lista){
     if(archivos.length >= 3){ 
+      mostrarAlertaArchivo('⚠️ <b>Límite alcanzado:</b> Solo se permiten hasta 3 archivos por solicitud.');
       toast('Máximo 3 archivos permitidos.', 'err');
-      $('#fileErr').style.display='block'; 
       return; 
     }
 
     if(f.size > MAX_PESO){ 
-      toast(`El archivo "${f.name}" pesa ${(f.size/1024/1024).toFixed(1)} MB y supera el límite de 10 MB.`, 'err');
-      $('#fileErr').style.display='block'; 
+      const pesoMB = (f.size/1024/1024).toFixed(2);
+      mostrarAlertaArchivo(`❌ <b>Archivo rechazado:</b> "${esc(f.name)}" pesa <b>${pesoMB} MB</b> y supera el límite de 10 MB permitidos.`);
+      toast(`"${f.name}" (${pesoMB} MB) excede los 10 MB.`, 'err');
       continue; 
     }
 
     const ext = f.name.split('.').pop().toLowerCase();
     if (!extensionesPermitidas.includes(ext) || !mimesPermitidos.includes(f.type)) {
-      toast(`Formato no permitido: ${f.name}. Solo PDF, JPG y PNG.`, 'err');
-      continue;
+      mostrarAlertaArchivo(`❌ <b>Formato no permitido:</b> "${esc(f.name)}". Solo se aceptan archivos PDF, JPG y PNG.`);
+      toast(`Formato no permitido en ${f.name}.`, 'err');
+      continue; 
     }
 
     archivos.push(f);
   }
 
-  if(archivos.length <= 3){
-    $('#fileErr').style.display = 'none';
-  }
   pintarChips();
 }
+
 function pintarChips(){
   $('#fileChips').innerHTML = archivos.map((f,i)=>
     `<span class="file-chip">📄 ${esc(f.name)} <em style="opacity:.7">${(f.size/1024/1024).toFixed(1)} MB</em><button type="button" onclick="quitarArchivo(${i})">✕</button></span>`).join('');
 }
-window.quitarArchivo = i => { archivos.splice(i,1); pintarChips(); };
+
+window.quitarArchivo = i => { 
+  archivos.splice(i,1); 
+  limpiarAlertaArchivo();
+  pintarChips(); 
+};
 
 /* Subida protegida de adjuntos */
 async function subirArchivo(codigoSeg, file){
@@ -916,7 +935,7 @@ async function subirArchivo(codigoSeg, file){
   const MAX_PESO = 10 * 1024 * 1024;
 
   if (file.size > MAX_PESO) {
-    throw new Error(`El archivo excede el tamaño máximo permitido de 10 MB.`);
+    throw new Error(`El archivo "${file.name}" supera el tamaño máximo de 10 MB.`);
   }
 
   const nombreLimpio = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -924,7 +943,7 @@ async function subirArchivo(codigoSeg, file){
   const ext = partes.pop().toLowerCase();
 
   if (!extensionesPermitidas.includes(ext) || !mimesPermitidos.includes(file.type)) {
-    throw new Error(`Tipo de archivo no permitido (.${ext}). Solo se aceptan documentos PDF e imágenes JPG/PNG.`);
+    throw new Error(`Formato no permitido (.${ext}). Solo se aceptan documentos PDF e imágenes JPG/PNG.`);
   }
 
   const ruta = `${codigoSeg}/${Date.now()}-${partes.join('_')}.${ext}`;
@@ -1044,7 +1063,7 @@ function validar(){
   });
 })();
 
-/* Envío Seguro del Formulario con Bloqueo Estricto de Adjuntos */
+/* Envío Seguro con Control Total de Adjuntos */
 $('#frm').addEventListener('submit', async e => {
   e.preventDefault();
   if(!validar()) return;
@@ -1058,14 +1077,14 @@ $('#frm').addEventListener('submit', async e => {
     const codigo_seguimiento = generarCodigoSeguimiento();
     const archivosSubidos = [];
 
-    // Si hay archivos seleccionados, todos deben subir con éxito o se cancela el registro
     for(const f of archivos){
       try{
         const subido = await subirArchivo(codigo_seguimiento, f);
         archivosSubidos.push(subido);
       }catch(errSub){
         console.error('Error subiendo archivo:', errSub);
-        toast(`Error en el archivo "${f.name}": ${errSub.message || 'Excede el límite o formato no permitido.'}`, 'err');
+        mostrarAlertaArchivo(`❌ <b>Error en archivo:</b> ${errSub.message || 'No se pudo subir.'}`);
+        toast(`Error al subir ${f.name}`, 'err');
         btnEnviar.disabled = false;
         btnEnviar.textContent = txtOriginal;
         return;
@@ -1106,6 +1125,7 @@ $('#frm').addEventListener('submit', async e => {
 
     $('#frm').reset();
     archivos = [];
+    limpiarAlertaArchivo();
     pintarChips();
     pintarReqs();
     toast('✓ Trámite recibido con éxito.', 'ok');
